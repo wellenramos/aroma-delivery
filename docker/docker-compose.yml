@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  aroma-delivery.db:
+    image: postgres:15.3
+    restart: always
+    ports:
+      - '5435:5432'
+    environment:
+      - POSTGRES_USER=aromadelivery
+      - POSTGRES_PASSWORD=aromadelivery
+      - POSTGRES_DB=aromadelivery
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
