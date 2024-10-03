@@ -1,2 +1,2 @@
-INSERT INTO perfil (nome) VALUES ('admin');
-INSERT INTO perfil (nome) VALUES ('cliente');
+INSERT INTO perfil (id, nome) VALUES (1, 'admin');
+INSERT INTO perfil (id, nome) VALUES (2, 'cliente');

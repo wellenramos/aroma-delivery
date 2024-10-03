@@ -1,0 +1,28 @@
+### Criar usuario
+POST {{host}}/usuarios
+Content-Type: application/json
+
+{
+  "nome": "Wellen Ramos Rocha",
+  "email": "rocha.wellen@gmail.com",
+  "perfilId": 1
+}
+
+### Atualiza usuario
+POST {{host}}/usuarios
+Content-Type: application/json
+
+{
+  "id": 3,
+  "nome": "Wellen Ramos Rodrigues Rocha",
+  "email": "rocha.wellen@gmail.com",
+  "perfilId": 1
+}
+
+### Obter usuario por id
+GET {{host}}/usuarios/1
+Content-Type: application/json
+
+### Obter usuario por id
+DELETE {{host}}/usuarios/4
+Content-Type: application/json

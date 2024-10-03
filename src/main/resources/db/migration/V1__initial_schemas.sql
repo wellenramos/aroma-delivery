@@ -1,5 +1,9 @@
-CREATE TABLE perfil
-(
-    id   SERIAL PRIMARY KEY,
+CREATE TABLE perfil(
+    id BIGINT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE categoria(
+    id BIGINT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
 );
