@@ -1,6 +1,7 @@
 package br.com.aroma.aroma_delivery.mapper;
 
 import br.com.aroma.aroma_delivery.dto.UsuarioDto;
+import br.com.aroma.aroma_delivery.dto.command.SalvarUsuarioCommand;
 import br.com.aroma.aroma_delivery.model.Usuario;
 import org.mapstruct.Mapper;
 
@@ -8,5 +9,5 @@ import org.mapstruct.Mapper;
 public interface UsuarioMapper {
 
     UsuarioDto toDto(Usuario usuario);
-    Usuario toEntity(UsuarioDto usuarioDTO);
+    Usuario toEntity(SalvarUsuarioCommand command);
 }

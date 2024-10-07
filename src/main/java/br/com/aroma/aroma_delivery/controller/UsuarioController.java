@@ -1,6 +1,7 @@
 package br.com.aroma.aroma_delivery.controller;
 
 import br.com.aroma.aroma_delivery.dto.UsuarioDto;
+import br.com.aroma.aroma_delivery.dto.command.SalvarUsuarioCommand;
 import br.com.aroma.aroma_delivery.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,15 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> criarUsuario(@RequestBody @Valid UsuarioDto dto) {
-        return ResponseEntity.ok(usuarioService.salvar(dto));
+    public ResponseEntity<UsuarioDto> criar(
+            @RequestBody @Valid SalvarUsuarioCommand command) {
+        return ResponseEntity.ok(usuarioService.salvar(command));
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDto> alterar(
+            @RequestBody @Valid SalvarUsuarioCommand command) {
+        return ResponseEntity.ok(usuarioService.alterar(command));
     }
 
     @GetMapping("/{id}")
@@ -25,7 +33,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletarUsuario(@PathVariable Long id) {
+    public void deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
     }
 }

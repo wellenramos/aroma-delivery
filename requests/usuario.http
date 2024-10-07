@@ -3,20 +3,20 @@ POST {{host}}/usuarios
 Content-Type: application/json
 
 {
-  "nome": "Wellen Ramos Rocha",
-  "email": "rocha.wellen@gmail.com",
-  "perfilId": 1
+  "nome": "Fabio Junior Rodrigues Rocha",
+  "email": "fabio@gmail.com",
+  "senha": "teste@123"
 }
 
 ### Atualiza usuario
-POST {{host}}/usuarios
+PUT {{host}}/usuarios
 Content-Type: application/json
 
 {
-  "id": 3,
-  "nome": "Wellen Ramos Rodrigues Rocha",
-  "email": "rocha.wellen@gmail.com",
-  "perfilId": 1
+  "id": 4,
+  "nome": "Fabio Junior Rodrigues",
+  "email": "fabiojunior@gmail.com",
+  "senha": "teste@124"
 }
 
 ### Obter usuario por id
