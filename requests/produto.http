@@ -1,0 +1,10 @@
+### Criar produto
+POST {{host}}/produtos
+Content-Type: application/json
+
+{
+  "nome": "Café do Sítio",
+  "descricao": "",
+  "preco": 12.00,
+  "categoriaId": 1
+}

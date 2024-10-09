@@ -1,9 +1,26 @@
 package br.com.aroma.aroma_delivery.controller;
 
+import br.com.aroma.aroma_delivery.dto.ProdutoDto;
+import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
+import br.com.aroma.aroma_delivery.service.ProdutoService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("produto")
+@RequestMapping("/produtos")
+@RequiredArgsConstructor
 public class ProdutoController {
+
+    private final ProdutoService produtoService;
+
+    @PostMapping
+    private ResponseEntity<ProdutoDto> salvar(@RequestBody @Valid SalvarProdutoCommand command) {
+        return ResponseEntity.ok(produtoService.salvar(command));
+    }
 }
+
