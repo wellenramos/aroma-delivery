@@ -16,7 +16,7 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @PostMapping
-    public ResponseEntity<UsuarioDto> criar(
+    public ResponseEntity<UsuarioDto> salvar(
             @RequestBody @Valid SalvarUsuarioCommand command) {
         return ResponseEntity.ok(usuarioService.salvar(command));
     }

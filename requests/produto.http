@@ -5,6 +5,27 @@ Content-Type: application/json
 {
   "nome": "Café do Sítio",
   "descricao": "",
-  "preco": 12.00,
+  "preco": 13.00,
   "categoriaId": 1
 }
+
+### Alterar produto
+PUT {{host}}/produtos
+Content-Type: application/json
+
+{
+  "id": 1,
+  "nome": "Café do Sítio",
+  "descricao": "",
+  "preco": 13.00,
+  "categoriaId": 1
+}
+
+### Buscar produto
+GET {{host}}/produtos/1
+Content-Type: application/json
+
+
+### Deletar produto
+DELETE {{host}}/produtos/2
+Content-Type: application/json

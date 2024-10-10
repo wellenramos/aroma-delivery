@@ -6,10 +6,7 @@ import br.com.aroma.aroma_delivery.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/produtos")
@@ -21,6 +18,22 @@ public class ProdutoController {
     @PostMapping
     private ResponseEntity<ProdutoDto> salvar(@RequestBody @Valid SalvarProdutoCommand command) {
         return ResponseEntity.ok(produtoService.salvar(command));
+    }
+
+    @PutMapping
+    public ResponseEntity<ProdutoDto> alterar(
+            @RequestBody @Valid SalvarProdutoCommand command) {
+        return ResponseEntity.ok(produtoService.alterar(command));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.obterPorId(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        produtoService.deletar(id);
     }
 }
 

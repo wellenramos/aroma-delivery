@@ -1,25 +1,15 @@
 package br.com.aroma.aroma_delivery.service;
 
-import br.com.aroma.aroma_delivery.dto.PerfilEnum;
 import br.com.aroma.aroma_delivery.dto.ProdutoDto;
-import br.com.aroma.aroma_delivery.dto.UsuarioDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
-import br.com.aroma.aroma_delivery.dto.command.SalvarUsuarioCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
-import br.com.aroma.aroma_delivery.mapper.UsuarioMapper;
 import br.com.aroma.aroma_delivery.model.Categoria;
-import br.com.aroma.aroma_delivery.model.Perfil;
 import br.com.aroma.aroma_delivery.model.Produto;
-import br.com.aroma.aroma_delivery.model.Usuario;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
-import br.com.aroma.aroma_delivery.repository.PerfilRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
-import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +18,6 @@ public class ProdutoService {
     private final ProdutoMapper mapper;
     private final ProdutoRepository repository;
     private final CategoriaRepository categoriaRepository;
-    private final PasswordEncoder passwordEncoder;
     private final ProdutoRepository produtoRepository;
 
 
