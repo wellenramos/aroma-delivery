@@ -49,6 +49,10 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorNome(categoriaId, nome));
     }
 
+    @PutMapping("/{id}/publicar")
+    public ResponseEntity<ProdutoDto> publicar(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.publicar(id));
+    }
 
 }
 

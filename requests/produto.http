@@ -36,3 +36,7 @@ Content-Type: application/json
 ### Buscar produto por nome
 GET {{host}}/produtos/categoria/1/todos?nome=Cafe
 Content-Type: application/json
+
+### Publicar produto
+PUT {{host}}/produtos/3/publicar
+Content-Type: application/json

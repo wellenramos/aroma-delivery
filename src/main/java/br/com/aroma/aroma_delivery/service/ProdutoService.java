@@ -69,4 +69,12 @@ public class ProdutoService {
         List<Produto> produtos = repository.buscarPorNome(categoria.getId(), nome);
         return mapper.toDtoList(produtos);
     }
+
+    public ProdutoDto publicar(Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+        produto.setSituacao(SituacaoProdutoEnum.PUBLICADO);
+        repository.save(produto);
+        return mapper.toDto(produto);
+    }
 }
