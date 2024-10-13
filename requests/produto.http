@@ -32,3 +32,7 @@ Content-Type: application/json
 ### Buscar produto por categoria
 GET {{host}}/produtos/categoria/1
 Content-Type: application/json
+
+### Buscar produto por nome
+GET {{host}}/produtos/categoria/1/todos?nome=Cafe
+Content-Type: application/json

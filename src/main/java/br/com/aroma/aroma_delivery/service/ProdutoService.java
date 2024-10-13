@@ -5,7 +5,6 @@ import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
-import br.com.aroma.aroma_delivery.mapper.ProdutoMapperImpl;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
@@ -23,8 +22,6 @@ public class ProdutoService {
     private final ProdutoRepository repository;
     private final CategoriaRepository categoriaRepository;
     private final ProdutoRepository produtoRepository;
-    private final ProdutoMapperImpl produtoMapperImpl;
-
 
     public ProdutoDto salvar(SalvarProdutoCommand command) {
         Produto produto = mapper.toEntity(command);
@@ -63,6 +60,13 @@ public class ProdutoService {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
         List<Produto> produtos = repository.findByCategoria(categoria);
+        return mapper.toDtoList(produtos);
+    }
+
+    public List<ProdutoDto> buscarPorNome(Long categoriaId, String nome) {
+        Categoria categoria = categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+        List<Produto> produtos = repository.buscarPorNome(categoria.getId(), nome);
         return mapper.toDtoList(produtos);
     }
 }

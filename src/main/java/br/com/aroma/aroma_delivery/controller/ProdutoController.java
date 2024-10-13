@@ -43,6 +43,12 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
     }
 
+    @GetMapping("/categoria/{categoriaId}/todos")
+    public ResponseEntity<List<ProdutoDto>> buscarPorNome(@PathVariable Long categoriaId,
+                                                          @RequestParam String nome) {
+        return ResponseEntity.ok(produtoService.buscarPorNome(categoriaId, nome));
+    }
+
 
 }
 
