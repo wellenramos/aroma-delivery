@@ -3,10 +3,10 @@ POST {{host}}/produtos
 Content-Type: application/json
 
 {
-  "nome": "Café do Sítio",
+  "nome": "Café 3 corações",
   "descricao": "",
-  "preco": 13.00,
-  "categoriaId": 1
+  "preco": 8.00,
+  "categoriaId": 2
 }
 
 ### Alterar produto
@@ -23,7 +23,7 @@ Content-Type: application/json
 
 ### Buscar produto
 GET {{host}}/produtos/1
-Content-Type: application/json
+Content-Type: application/jsonImple
 
 ### Deletar produto
 DELETE {{host}}/produtos/2

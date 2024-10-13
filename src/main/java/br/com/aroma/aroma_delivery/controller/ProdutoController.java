@@ -43,5 +43,6 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
     }
 
+
 }
 
