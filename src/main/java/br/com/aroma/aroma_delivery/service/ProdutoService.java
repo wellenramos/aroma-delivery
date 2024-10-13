@@ -1,9 +1,11 @@
 package br.com.aroma.aroma_delivery.service;
 
 import br.com.aroma.aroma_delivery.dto.ProdutoDto;
+import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
+import br.com.aroma.aroma_delivery.mapper.ProdutoMapperImpl;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
@@ -12,6 +14,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProdutoService {
@@ -19,6 +23,7 @@ public class ProdutoService {
     private final ProdutoRepository repository;
     private final CategoriaRepository categoriaRepository;
     private final ProdutoRepository produtoRepository;
+    private final ProdutoMapperImpl produtoMapperImpl;
 
 
     public ProdutoDto salvar(SalvarProdutoCommand command) {
@@ -28,6 +33,7 @@ public class ProdutoService {
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada."));
 
         produto.setCategoria(categoria);
+        produto.setSituacao(SituacaoProdutoEnum.CADASTRADO);
 
         repository.save(produto);
         return mapper.toDto(produto);
@@ -51,5 +57,12 @@ public class ProdutoService {
         Produto produto = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado."));
         repository.delete(produto);
+    }
+
+    public List<ProdutoDto> buscarPorCategoria(Long categoriaId) {
+        Categoria categoria = categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+        List<Produto> produtos = repository.findByCategoria(categoria);
+        return mapper.toDtoList(produtos);
     }
 }

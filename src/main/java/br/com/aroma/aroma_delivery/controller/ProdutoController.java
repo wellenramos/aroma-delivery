@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/produtos")
 @RequiredArgsConstructor
@@ -35,5 +37,11 @@ public class ProdutoController {
     public void deletar(@PathVariable Long id) {
         produtoService.deletar(id);
     }
+
+    @GetMapping("/categoria/{categoriaId}")
+    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId) {
+        return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
+    }
+
 }
 

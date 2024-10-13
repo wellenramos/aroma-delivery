@@ -1,5 +1,6 @@
 package br.com.aroma.aroma_delivery.model;
 
+import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,8 @@ public class Produto {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoProdutoEnum situacao;
 
 }

@@ -8,11 +8,14 @@ import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.model.Usuario;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
 
     ProdutoDto toDto(Produto produto);
     Produto toEntity(SalvarProdutoCommand command);
+    List<ProdutoDto> toDtoList(List<Produto> produtos);
 
 }
 

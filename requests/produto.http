@@ -14,7 +14,7 @@ PUT {{host}}/produtos
 Content-Type: application/json
 
 {
-  "id": 1,
+  "id": 3,
   "nome": "Café do Sítio",
   "descricao": "",
   "preco": 13.00,
@@ -25,7 +25,10 @@ Content-Type: application/json
 GET {{host}}/produtos/1
 Content-Type: application/json
 
-
 ### Deletar produto
 DELETE {{host}}/produtos/2
+Content-Type: application/json
+
+### Buscar produto por categoria
+GET {{host}}/produtos/categoria/1
 Content-Type: application/json
