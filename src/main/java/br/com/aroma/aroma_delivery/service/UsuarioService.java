@@ -11,8 +11,12 @@ import br.com.aroma.aroma_delivery.repository.PerfilRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +60,13 @@ public class UsuarioService {
         Usuario usuario = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
         repository.delete(usuario);
+    }
+
+    public UserDetails loadUserByUsername(String nome) throws UsernameNotFoundException {
+        Usuario user = usuarioRepository.findByNome(nome)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        return new org.springframework.security.core.userdetails.User(user.getNome(),
+                user.getSenha(), new ArrayList<>());
     }
 }

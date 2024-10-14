@@ -1,0 +1,8 @@
+### Obter usuario por id
+POST {{host}}/autenticacao/login
+Content-Type: application/json
+
+{
+  "login": "wellen.rocha@gmail.com",
+  "senha": "teste"
+}

@@ -3,9 +3,9 @@ POST {{host}}/usuarios
 Content-Type: application/json
 
 {
-  "nome": "Fabio Junior Rodrigues Rocha",
-  "email": "fabio@gmail.com",
-  "senha": "teste@123"
+  "nome": "Wellen Ramos Rodrigues Rocha",
+  "email": "rocha.wellen@gmail.com",
+  "senha": "teste"
 }
 
 ### Atualiza usuario
