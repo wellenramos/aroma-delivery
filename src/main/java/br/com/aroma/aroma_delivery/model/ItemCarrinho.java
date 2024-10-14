@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -34,4 +36,8 @@ public class ItemCarrinho {
     @Column(name = "tamanho_copo")
     private TamanhoEnum tamanhoCopo;
 
+    public void addCarrinho(Carrinho carrinho) {
+        carrinho.setItens(List.of(this));
+        this.carrinho = carrinho;
+    }
 }

@@ -38,8 +38,8 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/autenticacao/login", "/usuarios").permitAll()
-                .anyRequest().authenticated());
+//                .requestMatchers("/autenticacao/login", "/usuarios").permitAll()
+                .anyRequest().permitAll());
 
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 

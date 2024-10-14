@@ -1,0 +1,11 @@
+### Adicionar item no carrinho
+POST {{host}}/carrinho
+Content-Type: application/json
+
+{
+  "produtoId": 3,
+  "carrinhoId": 1,
+  "quantidade": 1,
+  "observacao": "item adicionado",
+  "tamanhoCopo": "GRANDE"
+}
