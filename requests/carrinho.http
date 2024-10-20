@@ -9,3 +9,8 @@ Content-Type: application/json
   "observacao": "item adicionado",
   "tamanhoCopo": "GRANDE"
 }
+
+### Deletar itens no carrinho
+DELETE {{host}}/carrinho/1/itens/5
+Content-Type: application/json
+

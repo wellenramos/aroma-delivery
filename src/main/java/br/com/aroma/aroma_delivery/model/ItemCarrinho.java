@@ -2,14 +2,17 @@ package br.com.aroma.aroma_delivery.model;
 
 import br.com.aroma.aroma_delivery.dto.TamanhoEnum;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table(name = "item_carrinho")
 public class ItemCarrinho {
 
@@ -37,7 +40,13 @@ public class ItemCarrinho {
     private TamanhoEnum tamanhoCopo;
 
     public void addCarrinho(Carrinho carrinho) {
-        carrinho.setItens(List.of(this));
+        if (carrinho.getItens() == null) {
+            carrinho.setItens(new ArrayList<>());
+        }
+        if (!carrinho.getItens().contains(this)) {
+            carrinho.getItens().add(this);
+        }
         this.carrinho = carrinho;
     }
+
 }

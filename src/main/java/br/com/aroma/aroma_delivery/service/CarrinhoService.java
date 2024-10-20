@@ -10,10 +10,9 @@ import br.com.aroma.aroma_delivery.model.Usuario;
 import br.com.aroma.aroma_delivery.repository.CarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +60,20 @@ public class CarrinhoService {
         itemCarrinho.addCarrinho(carrinho);
 
         carrinho.setItens(itemCarrinho.getCarrinho().getItens());
+
+        carrinhoRepository.save(carrinho);
+    }
+
+    @Transactional
+    public void removerItens(Long carrinhoId, Long itemId) {
+        Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
+                .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
+
+        boolean itemRemovido = carrinho.getItens().removeIf(item -> item.getId().equals(itemId));
+
+        if (!itemRemovido) {
+            throw new NotFoundException("Item com ID " + itemId + " não está presente no carrinho.");
+        }
 
         carrinhoRepository.save(carrinho);
     }
