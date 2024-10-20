@@ -12,6 +12,7 @@ import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
-public class UsuarioService {
+public class UsuarioService implements UserDetailsService {
 
     private final UsuarioMapper mapper;
     private final UsuarioRepository repository;
@@ -62,11 +63,12 @@ public class UsuarioService {
         repository.delete(usuario);
     }
 
-    public UserDetails loadUserByUsername(String nome) throws UsernameNotFoundException {
-        Usuario user = usuarioRepository.findByNome(nome)
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario user = usuarioRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        return new org.springframework.security.core.userdetails.User(user.getNome(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
                 user.getSenha(), new ArrayList<>());
     }
 }

@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "nome": "Wellen Ramos Rodrigues Rocha",
-  "email": "rocha.wellen@gmail.com",
+  "email": "wellen.rocha@gmail.com",
   "senha": "teste"
 }
 
@@ -20,8 +20,9 @@ Content-Type: application/json
 }
 
 ### Obter usuario por id
-GET {{host}}/usuarios/1
+GET {{host}}/usuarios/2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZWxsZW4ucm9jaGFAZ21haWwuY29tIiwiaWF0IjoxNzI5Mzg2NzAzLCJleHAiOjE3Mjk0NzMxMDN9.8VS3Buf5M-UiRCZF-PyroF4h5xRDgaoqiphYezISW81kEQNvoebRXcEoUUDQf1-YNu-8t_lafBJYekh9XZ28SQ
 
 ### Obter usuario por id
 DELETE {{host}}/usuarios/4
