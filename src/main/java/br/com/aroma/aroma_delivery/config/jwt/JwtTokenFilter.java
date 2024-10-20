@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -15,7 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             Usuario usuario = usuarioRepository.findByEmail(username)
                     .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
 
-            User user = new User(usuario.getNome(), usuario.getSenha(), new ArrayList<>());
+            User user = new User(usuario.getNome(), usuario.getSenha(), getAuthorities(usuario));
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 user, null, user.getAuthorities());
@@ -54,5 +57,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(Usuario user) {
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getPerfil().getNome().toUpperCase()));
     }
 }

@@ -11,13 +11,16 @@ import br.com.aroma.aroma_delivery.repository.PerfilRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +72,10 @@ public class UsuarioService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(),
-                user.getSenha(), new ArrayList<>());
+                user.getSenha(), getAuthorities(user));
+    }
+
+    private Collection<? extends GrantedAuthority> getAuthorities(Usuario user) {
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getPerfil().getNome().toUpperCase()));
     }
 }

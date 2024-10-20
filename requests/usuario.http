@@ -22,7 +22,7 @@ Content-Type: application/json
 ### Obter usuario por id
 GET {{host}}/usuarios/2
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZWxsZW4ucm9jaGFAZ21haWwuY29tIiwiaWF0IjoxNzI5Mzg2NzAzLCJleHAiOjE3Mjk0NzMxMDN9.8VS3Buf5M-UiRCZF-PyroF4h5xRDgaoqiphYezISW81kEQNvoebRXcEoUUDQf1-YNu-8t_lafBJYekh9XZ28SQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZWxsZW4ucm9jaGFAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9DTElFTlRFIl0sImlhdCI6MTcyOTM4Nzk5NiwiZXhwIjoxNzI5NDc0Mzk2fQ.gtR9PHfGi41vVVNDq07HSN7To4PTx0jE5KOsBST7n2njEDOSnFB7KuWotsVFya1oNVIbHV2OIVGiKbIdQr_AOQ
 
 ### Obter usuario por id
 DELETE {{host}}/usuarios/4

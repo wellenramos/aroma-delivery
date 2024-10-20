@@ -6,6 +6,7 @@ import br.com.aroma.aroma_delivery.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,23 +16,27 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @PostMapping
     public ResponseEntity<UsuarioDto> salvar(
             @RequestBody @Valid SalvarUsuarioCommand command) {
         return ResponseEntity.ok(usuarioService.salvar(command));
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @PutMapping
     public ResponseEntity<UsuarioDto> alterar(
             @RequestBody @Valid SalvarUsuarioCommand command) {
         return ResponseEntity.ok(usuarioService.alterar(command));
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(usuarioService.obterPorId(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         usuarioService.deletar(id);
