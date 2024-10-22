@@ -15,7 +15,7 @@ POST {{host}}/autenticacao/login
 Content-Type: application/json
 
 {
-  "login": "admin@gmail.com",
+  "login": "fabio.junior",
   "senha": "teste"
 }
 

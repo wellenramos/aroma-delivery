@@ -1,7 +1,10 @@
 package br.com.aroma.aroma_delivery.service;
 
-import br.com.aroma.aroma_delivery.dto.ItemCarrinhoDto;
+import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
+import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
+import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
+import br.com.aroma.aroma_delivery.mapper.CarrinhoMapper;
 import br.com.aroma.aroma_delivery.mapper.ItemCarrinhoMapper;
 import br.com.aroma.aroma_delivery.model.Carrinho;
 import br.com.aroma.aroma_delivery.model.ItemCarrinho;
@@ -11,6 +14,7 @@ import br.com.aroma.aroma_delivery.repository.CarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,49 +25,64 @@ public class CarrinhoService {
     private final UsuarioRepository usuarioRepository;
     private final CarrinhoRepository carrinhoRepository;
     private final ItemCarrinhoMapper itemCarrinhoMapper;
+    private final CarrinhoMapper carrinhoMapper;
     private final ProdutoRepository produtoRepository;
     private final SecurityService securityService;
 
-    public void adicionarItem(ItemCarrinhoDto dto) {
-
-        Produto produto = produtoRepository.findById(dto.getProdutoId())
+    public CarrinhoDto adicionarItem(SalvarItemCarrinhoCommand command) {
+        Produto produto = produtoRepository.findById(command.getProdutoId())
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
 
-        if (dto.getCarrinhoId() == null) {
-            criarCarrinho(dto, produto);
-        } else {
-            adicionarItemNoCarrinho(dto, produto);
+        if (!produto.getSituacao().equals(SituacaoProdutoEnum.PUBLICADO)) {
+            throw new IllegalStateException("Este produto ainda não foi publicado.");
         }
+
+        if (command.getCarrinhoId() == null)
+            return criarCarrinho(command, produto);
+        return adicionarItemNoCarrinho(command, produto);
     }
 
-    private void adicionarItemNoCarrinho(ItemCarrinhoDto dto, Produto produto) {
-        Carrinho carrinho = carrinhoRepository.findById(dto.getCarrinhoId())
+    private CarrinhoDto adicionarItemNoCarrinho(SalvarItemCarrinhoCommand command, Produto produto) {
+        Carrinho carrinho = carrinhoRepository.findById(command.getCarrinhoId())
                 .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
 
-        ItemCarrinho itemCarrinho = itemCarrinhoMapper.toEntity(dto);
+        ItemCarrinho itemCarrinho = itemCarrinhoMapper.toEntity(command);
         itemCarrinho.setProduto(produto);
         itemCarrinho.setCarrinho(carrinho);
 
         carrinho.getItens().add(itemCarrinho);
         carrinho.setItens(carrinho.getItens());
-        carrinhoRepository.save(carrinho);
+        Carrinho saved = carrinhoRepository.save(carrinho);
+        return carrinhoMapper.toDto(saved);
     }
 
-    private void criarCarrinho(ItemCarrinhoDto dto, Produto produto) {
+    private CarrinhoDto criarCarrinho(SalvarItemCarrinhoCommand command, Produto produto) {
         String email = securityService.getAuthenticatedUser().getUsername();
-        Usuario usuario = usuarioRepository.findByEmail(email)
+        Usuario usuario = usuarioRepository.findByLogin(email)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         Carrinho carrinho = new Carrinho();
         carrinho.setUsuario(usuario);
 
-        ItemCarrinho itemCarrinho = itemCarrinhoMapper.toEntity(dto);
+        ItemCarrinho itemCarrinho = itemCarrinhoMapper.toEntity(command);
         itemCarrinho.setProduto(produto);
         itemCarrinho.addCarrinho(carrinho);
 
         carrinho.setItens(itemCarrinho.getCarrinho().getItens());
 
-        carrinhoRepository.save(carrinho);
+        Carrinho saved = carrinhoRepository.save(carrinho);
+        return carrinhoMapper.toDto(saved);
+    }
+
+    public CarrinhoDto alterarItem(@Valid SalvarItemCarrinhoCommand command) {
+        Carrinho carrinho = carrinhoRepository.findById(command.getCarrinhoId())
+                .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
+
+        carrinho.getItens().stream()
+                .filter(it -> it.getId().equals(command.getId()))
+                .findFirst().orElseThrow(() -> new NotFoundException("Item não encontrado"));
+
+        return this.adicionarItem(command);
     }
 
     @Transactional

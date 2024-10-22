@@ -4,10 +4,24 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "produtoId": 9,
+  "produtoId": 1,
   "quantidade": 1,
   "observacao": "item adicionado",
   "tamanhoCopo": "GRANDE"
+}
+
+### Alterar itens do carrinho
+PUT {{host}}/carrinho
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "id": 4,
+  "carrinhoId": 1,
+  "produtoId": 1,
+  "quantidade": 1,
+  "observacao": "item adicionado",
+  "tamanhoCopo": "PEQUENO"
 }
 
 ### Deletar itens no carrinho
