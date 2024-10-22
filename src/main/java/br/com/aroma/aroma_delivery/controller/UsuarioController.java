@@ -16,8 +16,7 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
 
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
-    @PostMapping
+    @PostMapping("/salvar")
     public ResponseEntity<UsuarioDto> salvar(
             @RequestBody @Valid SalvarUsuarioCommand command) {
         return ResponseEntity.ok(usuarioService.salvar(command));

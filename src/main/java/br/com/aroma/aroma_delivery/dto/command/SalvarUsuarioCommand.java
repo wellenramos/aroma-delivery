@@ -17,7 +17,10 @@ public class SalvarUsuarioCommand {
     @Size(message = "Limite do campo nome excedido", max = 200)
     private String nome;
 
-    @NotBlank(message = "Email é obrigatório")
+    @NotBlank(message = "Login é obrigatório")
+    @Size(message = "Limite do campo login excedido", max = 200)
+    private String login;
+
     @Size(message = "Limite do campo email excedido", max = 100)
     private String email;
 

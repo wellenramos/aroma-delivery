@@ -1,11 +1,10 @@
 ### Criar usuario
-POST {{host}}/usuarios
+POST {{host}}/usuarios/salvar
 Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
 
 {
   "nome": "Wellen Ramos Rodrigues Rocha",
-  "email": "admin@gmail.com",
+  "login": "rocha.wellen",
   "senha": "teste"
 }
 
@@ -15,10 +14,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "id": 4,
-  "nome": "Fabio Junior Rodrigues",
-  "email": "fabiojunior@gmail.com",
-  "senha": "teste@124"
+  "id": 5,
+  "nome": "Wellen Ramos Rodrigues",
+  "login": "rocha.wellen",
+  "senha": "teste"
 }
 
 ### Obter usuario por id

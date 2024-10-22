@@ -36,6 +36,8 @@ public class UsuarioService implements UserDetailsService {
     public UsuarioDto salvar(SalvarUsuarioCommand command) {
         Usuario usuario = mapper.toEntity(command);
 
+        validarLogin(command);
+
         Perfil perfil = perfilRepository.findById(PerfilEnum.CLIENTE.getCodigo())
                 .orElseThrow(() -> new NotFoundException("Perfil não encontrado."));
 
@@ -46,9 +48,22 @@ public class UsuarioService implements UserDetailsService {
         return mapper.toDto(usuario);
     }
 
+    private void validarLogin(SalvarUsuarioCommand command) {
+        if (command.getId() == null) {
+            usuarioRepository.findByLogin(command.getLogin())
+                    .ifPresent((it) -> {
+                        throw new IllegalStateException("Login %s já existente.".formatted(it.getLogin()));
+                    } );
+        }
+    }
+
     public UsuarioDto alterar(@Valid SalvarUsuarioCommand command) {
         Usuario usuario = usuarioRepository.findById(command.getId())
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if (!usuario.getLogin().equals(command.getLogin())) {
+            throw new IllegalArgumentException("Não é possível alterar nome do login.");
+        }
 
         this.salvar(command);
         return mapper.toDto(usuario);
@@ -68,10 +83,10 @@ public class UsuarioService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario user = usuarioRepository.findByEmail(username)
+        Usuario user = usuarioRepository.findByLogin(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new org.springframework.security.core.userdetails.User(user.getLogin(),
                 user.getSenha(), getAuthorities(user));
     }
 

@@ -36,10 +36,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsernameFromToken(token);
 
-            Usuario usuario = usuarioRepository.findByEmail(username)
+            Usuario usuario = usuarioRepository.findByLogin(username)
                     .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
 
-            User user = new User(usuario.getEmail(), usuario.getSenha(), getAuthorities(usuario));
+            User user = new User(usuario.getLogin(), usuario.getSenha(), getAuthorities(usuario));
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 user, null, user.getAuthorities());

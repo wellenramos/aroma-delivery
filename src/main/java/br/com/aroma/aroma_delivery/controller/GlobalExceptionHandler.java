@@ -88,6 +88,20 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.NOT_FOUND);
   }
 
+  /**
+   * Handles IllegalStateException and returns a ResponseEntity object with the appropriate HTTP status
+   * code and error details.
+   *
+   * @param ex The IllegalStateException to be handled.
+   * @return A ResponseEntity object containing a map of errors and the HTTP status code.
+   */
+  @ExceptionHandler(IllegalStateException.class)
+  public ResponseEntity<Object> handleIllegalStateException(IllegalStateException ex) {
+    Map<String, String> errors = new HashMap<>();
+    errors.put("message", ex.getMessage());
+    return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();
