@@ -5,6 +5,7 @@ import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ProdutoController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    private ResponseEntity<ProdutoDto> salvar(@RequestBody @Valid SalvarProdutoCommand command) {
+    public ResponseEntity<ProdutoDto> salvar(@RequestBody @Valid SalvarProdutoCommand command) {
         return ResponseEntity.ok(produtoService.salvar(command));
     }
 
@@ -31,6 +32,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.alterar(command));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.obterPorId(id));
@@ -42,13 +44,13 @@ public class ProdutoController {
         produtoService.deletar(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId) {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
     }
 
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
     @GetMapping("/categoria/{categoriaId}/todos")
     public ResponseEntity<List<ProdutoDto>> buscarPorNome(@PathVariable Long categoriaId,
                                                           @RequestParam String nome) {

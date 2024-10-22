@@ -1,4 +1,4 @@
-### Obter usuario por id
+### Autenticar como cliente
 POST {{host}}/autenticacao/login
 Content-Type: application/json
 
@@ -6,3 +6,17 @@ Content-Type: application/json
   "login": "wellen.rocha@gmail.com",
   "senha": "teste"
 }
+
+> {% client.global.set("jwt_token", response.body.token); %}
+
+
+### Autenticar como administrador
+POST {{host}}/autenticacao/login
+Content-Type: application/json
+
+{
+  "login": "admin@gmail.com",
+  "senha": "teste"
+}
+
+> {% client.global.set("jwt_token", response.body.token); %}

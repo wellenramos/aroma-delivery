@@ -1,16 +1,18 @@
 ### Criar usuario
 POST {{host}}/usuarios
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "nome": "Wellen Ramos Rodrigues Rocha",
-  "email": "wellen.rocha@gmail.com",
+  "email": "admin@gmail.com",
   "senha": "teste"
 }
 
 ### Atualiza usuario
 PUT {{host}}/usuarios
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "id": 4,
@@ -22,8 +24,9 @@ Content-Type: application/json
 ### Obter usuario por id
 GET {{host}}/usuarios/2
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ3ZWxsZW4ucm9jaGFAZ21haWwuY29tIiwicm9sZXMiOlsiUk9MRV9DTElFTlRFIl0sImlhdCI6MTcyOTM4Nzk5NiwiZXhwIjoxNzI5NDc0Mzk2fQ.gtR9PHfGi41vVVNDq07HSN7To4PTx0jE5KOsBST7n2njEDOSnFB7KuWotsVFya1oNVIbHV2OIVGiKbIdQr_AOQ
+Authorization: Bearer {{jwt_token}}
 
 ### Obter usuario por id
 DELETE {{host}}/usuarios/4
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

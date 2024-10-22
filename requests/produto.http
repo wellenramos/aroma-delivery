@@ -1,6 +1,7 @@
 ### Criar produto
 POST {{host}}/produtos
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "nome": "Café 3 corações",
@@ -12,6 +13,7 @@ Content-Type: application/json
 ### Alterar produto
 PUT {{host}}/produtos
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "id": 3,
@@ -23,20 +25,25 @@ Content-Type: application/json
 
 ### Buscar produto
 GET {{host}}/produtos/1
-Content-Type: application/jsonImple
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### Deletar produto
 DELETE {{host}}/produtos/2
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### Buscar produto por categoria
 GET {{host}}/produtos/categoria/1
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 ### Buscar produto por nome
 GET {{host}}/produtos/categoria/1/todos?nome=Cafe
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}v
 
 ### Publicar produto
 PUT {{host}}/produtos/3/publicar
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

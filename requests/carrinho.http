@@ -1,6 +1,7 @@
 ### Adicionar item no carrinho
 POST {{host}}/carrinho
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
 {
   "produtoId": 3,
@@ -13,4 +14,5 @@ Content-Type: application/json
 ### Deletar itens no carrinho
 DELETE {{host}}/carrinho/1/itens/5
 Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
 
