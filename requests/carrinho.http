@@ -29,3 +29,8 @@ DELETE {{host}}/carrinho/1/itens/5
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
+### Atualizar quantidade itens no carrinho
+PUT {{host}}/carrinho/1/itens/1/atualizar-quantidade?quantidade=7
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+

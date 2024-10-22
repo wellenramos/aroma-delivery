@@ -98,4 +98,15 @@ public class CarrinhoService {
 
         carrinhoRepository.save(carrinho);
     }
+
+    public void atualizarQuantidadeItens(Long carrinhoId, Long itemId, Integer quantidade) {
+        Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
+                .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
+
+        carrinho.getItens().stream()
+            .filter(it -> it.getId().equals(itemId))
+            .forEach(item -> item.setQuantidade(quantidade));
+
+        carrinhoRepository.save(carrinho);
+    }
 }

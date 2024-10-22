@@ -33,4 +33,11 @@ public class CarrinhoController {
     public void removerItens(@PathVariable Long carrinhoId, @PathVariable Long itemId) {
         carrinhoService.removerItens(carrinhoId, itemId);
     }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @PutMapping("/{carrinhoId}/itens/{itemId}/atualizar-quantidade")
+    public void atualizarQuantidadeItens(@PathVariable Long carrinhoId, @PathVariable Long itemId,
+                                        @RequestParam Integer quantidade) {
+        carrinhoService.atualizarQuantidadeItens(carrinhoId, itemId, quantidade);
+    }
 }
