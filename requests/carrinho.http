@@ -4,8 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "produtoId": 3,
-  "carrinhoId": 1,
+  "produtoId": 9,
   "quantidade": 1,
   "observacao": "item adicionado",
   "tamanhoCopo": "GRANDE"

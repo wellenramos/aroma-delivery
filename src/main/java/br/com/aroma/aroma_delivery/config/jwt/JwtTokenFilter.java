@@ -39,7 +39,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             Usuario usuario = usuarioRepository.findByEmail(username)
                     .orElseThrow(() -> new IllegalArgumentException("Usuario não encontrado"));
 
-            User user = new User(usuario.getNome(), usuario.getSenha(), getAuthorities(usuario));
+            User user = new User(usuario.getEmail(), usuario.getSenha(), getAuthorities(usuario));
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 user, null, user.getAuthorities());

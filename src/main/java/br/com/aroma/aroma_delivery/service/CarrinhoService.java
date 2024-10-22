@@ -22,6 +22,7 @@ public class CarrinhoService {
     private final CarrinhoRepository carrinhoRepository;
     private final ItemCarrinhoMapper itemCarrinhoMapper;
     private final ProdutoRepository produtoRepository;
+    private final SecurityService securityService;
 
     public void adicionarItem(ItemCarrinhoDto dto) {
 
@@ -49,7 +50,8 @@ public class CarrinhoService {
     }
 
     private void criarCarrinho(ItemCarrinhoDto dto, Produto produto) {
-        Usuario usuario = usuarioRepository.findById(1L)
+        String email = securityService.getAuthenticatedUser().getUsername();
+        Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
 
         Carrinho carrinho = new Carrinho();
