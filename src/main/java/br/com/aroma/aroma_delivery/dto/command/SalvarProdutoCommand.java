@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,5 +27,7 @@ public class SalvarProdutoCommand {
 
     @NotNull(message = "O campo categoria é obrigatório")
     private Long categoriaId;
+
+    private List<Long> adicionais;
 
 }

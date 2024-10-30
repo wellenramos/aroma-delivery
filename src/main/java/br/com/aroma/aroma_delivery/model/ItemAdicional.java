@@ -13,7 +13,6 @@ public class ItemAdicional {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_adicional_id_gen")
     @SequenceGenerator(name = "item_adicional_id_gen", sequenceName = "item_adicional_seq", allocationSize = 1)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne
@@ -23,7 +22,4 @@ public class ItemAdicional {
     @ManyToOne
     @JoinColumn(name = "adicional_id")
     private Produto adicional;
-
-    @Column(name = "quantidade")
-    private Integer quantidade;
 }

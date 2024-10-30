@@ -6,6 +6,7 @@ import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
 import br.com.aroma.aroma_delivery.model.Categoria;
+import br.com.aroma.aroma_delivery.model.ItemAdicional;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
@@ -31,9 +32,25 @@ public class ProdutoService {
 
         produto.setCategoria(categoria);
         produto.setSituacao(SituacaoProdutoEnum.CADASTRADO);
+        incluirItensAdicionais(command.getAdicionais(), produto);
 
         repository.save(produto);
         return mapper.toDto(produto);
+    }
+
+    private void incluirItensAdicionais(List<Long> itens, Produto produto) {
+        if (itens != null && !itens.isEmpty()) {
+            List<ItemAdicional> adicionais = itens.stream()
+                    .map(adicionalId -> {
+                        Produto adicionalProduto = repository.findById(adicionalId)
+                                .orElseThrow(() -> new NotFoundException("Produto adicional não encontrado."));
+                        ItemAdicional itemAdicional = new ItemAdicional();
+                        itemAdicional.setProduto(produto);
+                        itemAdicional.setAdicional(adicionalProduto);
+                        return itemAdicional;
+                    }).toList();
+            produto.setAdicionais(adicionais);
+        }
     }
 
     public ProdutoDto alterar(@Valid SalvarProdutoCommand command) {

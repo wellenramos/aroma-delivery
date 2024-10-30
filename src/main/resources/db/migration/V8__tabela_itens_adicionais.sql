@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS Item_Adicional (
     id BIGINT DEFAULT nextval('item_adicional_seq') PRIMARY KEY,
     produto_id BIGINT NOT NULL,
     adicional_id BIGINT NOT NULL,
-    quantidade INT NOT NULL DEFAULT 0,
     CONSTRAINT fk_produto FOREIGN KEY (produto_id) REFERENCES Produto(id),
     CONSTRAINT fk_adicional FOREIGN KEY (adicional_id) REFERENCES Produto(id),
     CONSTRAINT produto_adicional_unique UNIQUE (produto_id, adicional_id) -- Impede duplicidade de associação
