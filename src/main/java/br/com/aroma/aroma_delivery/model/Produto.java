@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +35,6 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private SituacaoProdutoEnum situacao;
 
+    @OneToMany(mappedBy = "produto")
+    private List<ItemAdicional> adicionais;
 }
