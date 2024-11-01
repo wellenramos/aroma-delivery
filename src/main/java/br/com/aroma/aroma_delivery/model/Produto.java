@@ -35,6 +35,6 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private SituacaoProdutoEnum situacao;
 
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemAdicional> adicionais;
 }

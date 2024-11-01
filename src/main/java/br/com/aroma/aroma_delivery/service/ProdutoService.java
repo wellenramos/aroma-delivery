@@ -27,38 +27,63 @@ public class ProdutoService {
     public ProdutoDto salvar(SalvarProdutoCommand command) {
         Produto produto = mapper.toEntity(command);
 
-        Categoria categoria = categoriaRepository.findById(command.getCategoriaId())
-                .orElseThrow(() -> new NotFoundException("Categoria não encontrada."));
-
-        produto.setCategoria(categoria);
+        produto.setCategoria(obterCategoriaPorId(command.getCategoriaId()));
         produto.setSituacao(SituacaoProdutoEnum.CADASTRADO);
-        incluirItensAdicionais(command.getAdicionais(), produto);
+        configurarItensAdicionais(command.getAdicionais(), produto);
 
         repository.save(produto);
         return mapper.toDto(produto);
     }
 
-    private void incluirItensAdicionais(List<Long> itens, Produto produto) {
-        if (itens != null && !itens.isEmpty()) {
-            List<ItemAdicional> adicionais = itens.stream()
-                    .map(adicionalId -> {
-                        Produto adicionalProduto = repository.findById(adicionalId)
-                                .orElseThrow(() -> new NotFoundException("Produto adicional não encontrado."));
-                        ItemAdicional itemAdicional = new ItemAdicional();
-                        itemAdicional.setProduto(produto);
-                        itemAdicional.setAdicional(adicionalProduto);
-                        return itemAdicional;
-                    }).toList();
-            produto.setAdicionais(adicionais);
-        }
+    public ProdutoDto alterar(@Valid SalvarProdutoCommand command) {
+        Produto produto = buscarProdutoPorId(command.getId());
+        Categoria categoria = obterCategoriaPorId(command.getCategoriaId());
+
+        produto.setCategoria(categoria);
+        atualizarItensAdicionais(command.getAdicionais(), produto);;
+
+        repository.save(produto);
+        return mapper.toDto(produto);
     }
 
-    public ProdutoDto alterar(@Valid SalvarProdutoCommand command) {
-        Produto produto = produtoRepository.findById(command.getId())
-                .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+    private Categoria obterCategoriaPorId(Long categoriaId) {
+        return categoriaRepository.findById(categoriaId)
+                .orElseThrow(() -> new NotFoundException("Categoria com ID " + categoriaId + " não encontrada."));
+    }
 
-        this.salvar(command);
-        return mapper.toDto(produto);
+    private Produto buscarProdutoPorId(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Produto com ID " + id + " não encontrado."));
+    }
+
+    private void configurarItensAdicionais(List<Long> adicionaisIds, Produto produto) {
+        if (adicionaisIds == null || adicionaisIds.isEmpty()) return;
+
+        List<ItemAdicional> itensAdicionais = adicionaisIds.stream()
+                .map(this::criarItemAdicional)
+                .peek(item -> item.setProduto(produto))
+                .toList();
+
+        produto.setAdicionais(itensAdicionais);
+    }
+
+    private void atualizarItensAdicionais(List<Long> adicionaisIds, Produto produto) {
+        produto.getAdicionais().removeIf(item -> !adicionaisIds.contains(item.getAdicional().getId()));
+
+        adicionaisIds.stream()
+                .filter(id -> produto.getAdicionais().stream()
+                        .noneMatch(item -> item.getAdicional().getId().equals(id)))
+                .map(this::criarItemAdicional)
+                .forEach(produto.getAdicionais()::add);
+    }
+
+    private ItemAdicional criarItemAdicional(Long adicionalId) {
+        Produto adicionalProduto = repository.findById(adicionalId)
+                .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + adicionalId + " não encontrado."));
+
+        ItemAdicional itemAdicional = new ItemAdicional();
+        itemAdicional.setAdicional(adicionalProduto);
+        return itemAdicional;
     }
 
     public ProdutoDto obterPorId(Long id) {
