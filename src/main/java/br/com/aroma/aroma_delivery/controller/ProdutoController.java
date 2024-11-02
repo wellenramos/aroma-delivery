@@ -32,7 +32,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.alterar(command));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.obterPorId(id));

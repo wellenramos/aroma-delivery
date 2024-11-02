@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
-public class ProdutoDto {
+public class ProdutoResumidoDto {
 
     private Long id;
     private String nome;
@@ -17,5 +16,4 @@ public class ProdutoDto {
     private BigDecimal preco;
     private Categoria categoria;
     private SituacaoProdutoEnum situacao;
-    private List<ItemAdicionalDto> adicionais;
 }

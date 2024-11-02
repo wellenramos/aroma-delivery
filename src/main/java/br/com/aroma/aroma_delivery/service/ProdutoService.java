@@ -60,8 +60,7 @@ public class ProdutoService {
         if (adicionaisIds == null || adicionaisIds.isEmpty()) return;
 
         List<ItemAdicional> itensAdicionais = adicionaisIds.stream()
-                .map(this::criarItemAdicional)
-                .peek(item -> item.setProduto(produto))
+                .map((it) -> criarItemAdicional(it, produto))
                 .toList();
 
         produto.setAdicionais(itensAdicionais);
@@ -73,15 +72,16 @@ public class ProdutoService {
         adicionaisIds.stream()
                 .filter(id -> produto.getAdicionais().stream()
                         .noneMatch(item -> item.getAdicional().getId().equals(id)))
-                .map(this::criarItemAdicional)
+                .map((it) -> criarItemAdicional(it, produto))
                 .forEach(produto.getAdicionais()::add);
     }
 
-    private ItemAdicional criarItemAdicional(Long adicionalId) {
+    private ItemAdicional criarItemAdicional(Long adicionalId, Produto produto) {
         Produto adicionalProduto = repository.findById(adicionalId)
                 .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + adicionalId + " não encontrado."));
 
         ItemAdicional itemAdicional = new ItemAdicional();
+        itemAdicional.setProduto(produto);
         itemAdicional.setAdicional(adicionalProduto);
         return itemAdicional;
     }
