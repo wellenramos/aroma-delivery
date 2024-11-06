@@ -93,4 +93,10 @@ public class UsuarioService implements UserDetailsService {
     private Collection<? extends GrantedAuthority> getAuthorities(Usuario user) {
         return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getPerfil().getNome().toUpperCase()));
     }
+
+    public UsuarioDto findByLogin(String login) {
+        Usuario usuario = repository.findByLogin(login)
+                .orElseThrow(() -> new NotFoundException("Usuário inexistente."));
+        return mapper.toDto(usuario);
+    }
 }

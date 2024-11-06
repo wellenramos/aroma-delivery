@@ -29,3 +29,9 @@ Authorization: Bearer {{jwt_token}}
 DELETE {{host}}/usuarios/4
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+
+### Obter usuario por id
+GET {{host}}/usuarios/dados/login/rocha.wellen
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

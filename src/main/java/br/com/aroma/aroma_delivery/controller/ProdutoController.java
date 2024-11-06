@@ -44,7 +44,7 @@ public class ProdutoController {
         produtoService.deletar(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/categoria/{categoriaId}")
     public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId) {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
