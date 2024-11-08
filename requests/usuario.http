@@ -15,7 +15,7 @@ Authorization: Bearer {{jwt_token}}
 
 {
   "id": 5,
-  "nome": "Wellen Ramos Rodrigues",
+  "nome": "Wellen Ramos Rodrigues Rocha",
   "login": "rocha.wellen",
   "senha": "teste"
 }
