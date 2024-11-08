@@ -1,0 +1,40 @@
+### Criar endereço
+POST {{host}}/enderecos
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "cep": "72415400",
+  "numero": "8",
+  "complemento": "Residencial Golden Green",
+  "bairro": "Setor sul",
+  "cidade": "Gama",
+  "estado": "DF",
+  "principal": true
+}
+
+### Atualiza endereço
+PUT {{host}}/enderecos
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "id": 1,
+  "cep": "72415400",
+  "numero": "9",
+  "complemento": "Residencial Golden Green",
+  "bairro": "Setor sul",
+  "cidade": "Gama",
+  "estado": "DF",
+  "principal": true
+}
+
+### Obter endereço por id
+GET {{host}}/enderecos/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Excluir endereço por id
+DELETE {{host}}/enderecos/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
