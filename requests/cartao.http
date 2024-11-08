@@ -1,0 +1,18 @@
+### Criar endereço
+POST {{host}}/cartoes
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "numero": "5585 8148 8793 1111",
+  "titular": "Wellen Ramos Rodrigues Rocha",
+  "validadeMes": 12,
+  "validadeAno": 2025,
+  "cvv": "228"
+}
+
+
+### Excluir endereço por id
+DELETE {{host}}/enderecos/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
