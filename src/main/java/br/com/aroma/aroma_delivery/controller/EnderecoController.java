@@ -1,5 +1,6 @@
 package br.com.aroma.aroma_delivery.controller;
 
+import br.com.aroma.aroma_delivery.dto.EnderecoBaseDto;
 import br.com.aroma.aroma_delivery.dto.EnderecoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarEnderecoCommand;
 import br.com.aroma.aroma_delivery.service.EnderecoService;
@@ -47,5 +48,11 @@ public class EnderecoController {
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
         service.deletar(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @GetMapping("/cep/{cep}")
+    public EnderecoBaseDto consultarPorCep(@PathVariable String cep) {
+        return service.consultarPorCep(cep);
     }
 }

@@ -31,5 +31,6 @@ CREATE TABLE IF NOT EXISTS Endereco_Base (
     cep VARCHAR(20) NOT NULL,
     bairro VARCHAR(100),
     cidade VARCHAR(100),
-    estado VARCHAR(50)
+    estado VARCHAR(50),
+    uf VARCHAR(2)
 );

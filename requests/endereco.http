@@ -38,3 +38,9 @@ Authorization: Bearer {{jwt_token}}
 DELETE {{host}}/enderecos/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+
+### Obter endereço no viaCep
+GET {{host}}/enderecos/cep/72415400
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
