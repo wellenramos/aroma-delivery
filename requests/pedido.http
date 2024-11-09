@@ -13,3 +13,13 @@ Authorization: Bearer {{jwt_token}}
 GET {{host}}/pedidos
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+### Avaliar pedido
+POST {{host}}//pedidos/1/avaliar
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "nota": 5,
+  "comentario": "Excelente café"
+}

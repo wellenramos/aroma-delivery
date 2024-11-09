@@ -1,0 +1,4 @@
+### Criar pedido
+GET {{host}}/avaliacoes
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

@@ -1,6 +1,8 @@
 package br.com.aroma.aroma_delivery.service;
 
+import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
+import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPagamentoEnum;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPedidoEnum;
@@ -34,6 +36,7 @@ public class PedidoService {
   private final EnderecoRepository enderecoRepository;
   private final ItemCarrinhoRepository itemCarrinhoRepository;
   private final CartaoRepository cartaoRepository;
+  private final AvaliacaoService avaliacaoService;
   private final PedidoMapper mapper;
 
 
@@ -57,6 +60,10 @@ public class PedidoService {
     Usuario usuario = obterUsuarioAutenticado();
     List<Pedido> pedidos = repository.findAllByUsuario(usuario);
     return mapper.toDtoList(pedidos);
+  }
+
+  public AvaliacaoDto avaliar(Long pedidoId, AvaliacaoPedidoCommand command) {
+    return avaliacaoService.avaliar(pedidoId, command);
   }
 
   private Usuario obterUsuarioAutenticado() {
