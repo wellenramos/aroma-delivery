@@ -4,7 +4,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "numero": "5585 8148 8793 1111",
+  "numero": "5440 8046 5056 8738",
   "titular": "Wellen Ramos Rodrigues Rocha",
   "validadeMes": 12,
   "validadeAno": 2025,

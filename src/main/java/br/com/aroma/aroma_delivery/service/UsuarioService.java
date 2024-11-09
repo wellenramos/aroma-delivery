@@ -1,6 +1,6 @@
 package br.com.aroma.aroma_delivery.service;
 
-import br.com.aroma.aroma_delivery.dto.PerfilEnum;
+import br.com.aroma.aroma_delivery.dto.enums.PerfilEnum;
 import br.com.aroma.aroma_delivery.dto.UsuarioDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarUsuarioCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;

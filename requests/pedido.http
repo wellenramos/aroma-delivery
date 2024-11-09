@@ -1,0 +1,15 @@
+### Criar pedido
+POST {{host}}/pedidos
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "enderecoId": 1,
+  "cartaoId": 1,
+  "itens": [1]
+}
+
+### Obter todos pedidos do usuario
+GET {{host}}/pedidos
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

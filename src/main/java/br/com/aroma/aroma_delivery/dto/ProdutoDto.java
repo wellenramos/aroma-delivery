@@ -1,5 +1,6 @@
 package br.com.aroma.aroma_delivery.dto;
 
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package br.com.aroma.aroma_delivery.model;
 
-import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

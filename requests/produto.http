@@ -21,7 +21,7 @@ Authorization: Bearer {{jwt_token}}
   "descricao": "Chocolate quente europeu bem cremoso, pra aquecer o coração!",
   "preco": 23.00,
   "categoriaId": 2,
-  "adicionais": [1]
+  "adicionais": []
 }
 
 ### Alterar produto

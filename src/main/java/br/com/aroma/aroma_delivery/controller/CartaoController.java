@@ -1,11 +1,8 @@
 package br.com.aroma.aroma_delivery.controller;
 
 import br.com.aroma.aroma_delivery.dto.CartaoDto;
-import br.com.aroma.aroma_delivery.dto.EnderecoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarCartaoCommand;
-import br.com.aroma.aroma_delivery.dto.command.SalvarEnderecoCommand;
 import br.com.aroma.aroma_delivery.service.CartaoService;
-import br.com.aroma.aroma_delivery.service.EnderecoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/cartoes")
-public class CarcaoController {
+public class CartaoController {
 
     private final CartaoService service;
 

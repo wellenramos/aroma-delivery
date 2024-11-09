@@ -1,13 +1,12 @@
 package br.com.aroma.aroma_delivery.model;
 
-import br.com.aroma.aroma_delivery.dto.TamanhoEnum;
+import br.com.aroma.aroma_delivery.dto.enums.TamanhoEnum;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -39,7 +38,11 @@ public class ItemCarrinho {
     @Column(name = "tamanho_copo")
     private TamanhoEnum tamanhoCopo;
 
-    public void addCarrinho(Carrinho carrinho) {
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "pedido_id")
+  private Pedido pedido;
+
+  public void addCarrinho(Carrinho carrinho) {
         if (carrinho.getItens() == null) {
             carrinho.setItens(new ArrayList<>());
         }

@@ -1,7 +1,7 @@
 package br.com.aroma.aroma_delivery.service;
 
 import br.com.aroma.aroma_delivery.dto.ProdutoDto;
-import br.com.aroma.aroma_delivery.dto.SituacaoProdutoEnum;
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;

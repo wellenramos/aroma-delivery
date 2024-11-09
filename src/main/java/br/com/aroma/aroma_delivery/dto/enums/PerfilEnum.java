@@ -1,4 +1,4 @@
-package br.com.aroma.aroma_delivery.dto;
+package br.com.aroma.aroma_delivery.dto.enums;
 
 import lombok.Getter;
 
