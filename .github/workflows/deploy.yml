@@ -25,6 +25,9 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Grant execute permission for Maven Wrapper
+        run: chmod +x ./mvnw
+
       - name: Build backend
         working-directory: .
         run: ./mvnw clean package -DskipTests
