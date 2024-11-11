@@ -30,11 +30,6 @@ jobs:
         working-directory: .
         run: mvn clean install -DskipTests
 
-#      - name: Install Elastic Beanstalk CLI
-#        run: |
-#          pip install --upgrade pip
-#          pip install awsebcli
-
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -45,13 +40,3 @@ jobs:
           version_label: 12345
           region: us-east-1
           deployment_package: target/aroma-delivery-0.0.1-SNAPSHOT.jar
-
-      # Deploy do Backend
-#      - name: Deploy backend to Elastic Beanstalk
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        run: |
-#          zip -j backend.zip target/*.jar
-#          eb init -p java-21 aroma-delivery-env --region $AWS_REGION
-#          eb deploy aroma-delivery-env --staged
