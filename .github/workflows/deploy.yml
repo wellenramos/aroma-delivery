@@ -1,4 +1,4 @@
-name: Deploy to Elastic Beanstalk
+name: Deploy to Elastic Beanstalk - Backend
 
 on:
   push:
@@ -37,6 +37,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: aroma-delivery-env
           environment_name: aroma-delivery-env-env
-          version_label: 12345
+          version_label: aroma-delivery-env-v1
           region: us-east-1
           deployment_package: target/aroma-delivery-0.0.1-SNAPSHOT.jar
