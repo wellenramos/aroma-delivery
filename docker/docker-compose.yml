@@ -7,7 +7,7 @@ services:
       - '5435:5432'
     environment:
       - POSTGRES_USER=aromadelivery
-      - POSTGRES_PASSWORD=aromadelivery
+      - POSTGRES_PASSWORD=aromadelivery2024
       - POSTGRES_DB=aromadelivery
     volumes:
       - ./data:/var/lib/postgresql/data
