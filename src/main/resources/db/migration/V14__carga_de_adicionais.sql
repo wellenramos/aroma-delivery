@@ -1,5 +1,5 @@
 -- Inserindo os adicionais para cada produto
-INSERT INTO Item_Adicional (produto_id, adicional_id)
+INSERT INTO produto_adicional (produto_id, adicional_id)
 SELECT produto.id, adicional.id
 FROM (
          SELECT UNNEST(ARRAY[

@@ -1,21 +1,19 @@
 package br.com.aroma.aroma_delivery.service;
 
 import br.com.aroma.aroma_delivery.dto.ProdutoDto;
-import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
 import br.com.aroma.aroma_delivery.model.Categoria;
-import br.com.aroma.aroma_delivery.model.ItemAdicional;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -61,31 +59,23 @@ public class ProdutoService {
     private void configurarItensAdicionais(List<Long> adicionaisIds, Produto produto) {
         if (adicionaisIds == null || adicionaisIds.isEmpty()) return;
 
-        List<ItemAdicional> itensAdicionais = adicionaisIds.stream()
-                .map((it) -> criarItemAdicional(it, produto))
-                .toList();
-
-        produto.setAdicionais(itensAdicionais);
+        adicionaisIds.forEach((it) -> {
+            Produto adicional = repository.findById(it)
+                .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + it + " não encontrado."));
+                    produto.getAdicionais().add(adicional);
+                });
     }
 
     private void atualizarItensAdicionais(List<Long> adicionaisIds, Produto produto) {
-        produto.getAdicionais().removeIf(item -> !adicionaisIds.contains(item.getAdicional().getId()));
+        produto.getAdicionais().removeIf(item -> !adicionaisIds.contains(item.getId()));
 
         adicionaisIds.stream()
-                .filter(id -> produto.getAdicionais().stream()
-                        .noneMatch(item -> item.getAdicional().getId().equals(id)))
-                .map((it) -> criarItemAdicional(it, produto))
-                .forEach(produto.getAdicionais()::add);
-    }
-
-    private ItemAdicional criarItemAdicional(Long adicionalId, Produto produto) {
-        Produto adicionalProduto = repository.findById(adicionalId)
-                .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + adicionalId + " não encontrado."));
-
-        ItemAdicional itemAdicional = new ItemAdicional();
-        itemAdicional.setProduto(produto);
-        itemAdicional.setAdicional(adicionalProduto);
-        return itemAdicional;
+                .filter(id -> produto.getAdicionais().stream().noneMatch(item -> item.getId().equals(id)))
+                .forEach((it) -> {
+                    Produto adicional = repository.findById(it)
+                        .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + it + " não encontrado."));
+                    produto.getAdicionais().add(adicional);
+                });
     }
 
     public ProdutoDto obterPorId(Long id) {

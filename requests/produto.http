@@ -17,6 +17,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
+  "id": 40,
   "nome": "Chocolate Quente",
   "descricao": "Chocolate quente europeu bem cremoso, pra aquecer o coração!",
   "preco": 23.00,

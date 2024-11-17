@@ -18,5 +18,5 @@ public class ProdutoDto {
     private BigDecimal preco;
     private Categoria categoria;
     private SituacaoProdutoEnum situacao;
-    private List<ItemAdicionalDto> adicionais;
+    private List<ProdutoResumidoDto> adicionais;
 }
