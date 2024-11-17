@@ -11,6 +11,7 @@ import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import jakarta.validation.Valid;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -109,8 +110,10 @@ public class ProdutoService {
     public List<ProdutoDto> buscarPorNome(Long categoriaId, String nome) {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
-        List<Produto> produtos = repository.buscarPorNome(categoria.getId(), nome);
-        return mapper.toDtoList(produtos);
+
+        if (Objects.nonNull(nome) && !nome.isEmpty())
+            return mapper.toDtoList(repository.buscarPorNome(categoria.getId(), nome));
+        return mapper.toDtoList(repository.findByCategoria(categoria));
     }
 
     public ProdutoDto publicar(Long id) {

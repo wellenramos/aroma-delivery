@@ -40,3 +40,11 @@ VALUES
     ('Café Gelado Mocha', 'Café gelado com chocolate e leite cremoso.', 20.00, 3, 'PUBLICADO'),
     ('Café Gelado Caramel', 'Café gelado com leite e calda de caramelo.', 22.00, 3, 'PUBLICADO'),
     ('Café Gelado Frappuccino', 'Café gelado batido com gelo, leite e calda de chocolate.', 24.00, 3, 'PUBLICADO');
+
+--produtos adicionais
+INSERT INTO Produto (nome, descricao, preco, categoria_id, situacao) VALUES
+    ('Creme de Leite', 'Creme de leite adicional', 2.00, 4, 'PUBLICADO'),
+    ('Chocolate Granulado', 'Granulado de chocolate', 1.50, 4, 'PUBLICADO'),
+    ('Canela', 'Canela em pó', 1.00, 4, 'PUBLICADO'),
+    ('Leite Condensado', 'Leite condensado para adoçar', 2.50, 4, 'PUBLICADO'),
+    ('Mel', 'Mel natural', 2.00, 4, 'PUBLICADO');

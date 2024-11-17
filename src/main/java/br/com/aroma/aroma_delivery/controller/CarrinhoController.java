@@ -1,6 +1,7 @@
 package br.com.aroma.aroma_delivery.controller;
 
 import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
+import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
 import br.com.aroma.aroma_delivery.service.CarrinhoService;
 import jakarta.validation.Valid;
@@ -39,5 +40,10 @@ public class CarrinhoController {
     public void atualizarQuantidadeItens(@PathVariable Long carrinhoId, @PathVariable Long itemId,
                                         @RequestParam Integer quantidade) {
         carrinhoService.atualizarQuantidadeItens(carrinhoId, itemId, quantidade);
+    }
+
+    @GetMapping("/{carrinhoId}/resumo")
+    public ResponseEntity<CarrinhoResumoDto> resumo(@PathVariable Long carrinhoId) {
+        return ResponseEntity.ok(carrinhoService.resumo(carrinhoId));
     }
 }

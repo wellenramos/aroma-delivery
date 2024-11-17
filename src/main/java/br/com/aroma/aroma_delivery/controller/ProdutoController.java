@@ -32,7 +32,7 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.alterar(command));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.obterPorId(id));
@@ -53,7 +53,7 @@ public class ProdutoController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
     @GetMapping("/categoria/{categoriaId}/todos")
     public ResponseEntity<List<ProdutoDto>> buscarPorNome(@PathVariable Long categoriaId,
-                                                          @RequestParam String nome) {
+                                                          @RequestParam(required = false) String nome) {
         return ResponseEntity.ok(produtoService.buscarPorNome(categoriaId, nome));
     }
 

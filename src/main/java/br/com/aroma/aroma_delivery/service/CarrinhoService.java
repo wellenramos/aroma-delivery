@@ -1,8 +1,10 @@
 package br.com.aroma.aroma_delivery.service;
 
 import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
-import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
+import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto;
+import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto.ItemCarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.CarrinhoMapper;
 import br.com.aroma.aroma_delivery.mapper.ItemCarrinhoMapper;
@@ -15,6 +17,7 @@ import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -108,5 +111,21 @@ public class CarrinhoService {
             .forEach(item -> item.setQuantidade(quantidade));
 
         carrinhoRepository.save(carrinho);
+    }
+
+    public CarrinhoResumoDto resumo(Long carrinhoId) {
+        Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
+            .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
+
+        List<ItemCarrinhoResumoDto> itens = carrinho.getItens().stream()
+            .map(it -> ItemCarrinhoResumoDto.builder()
+                .id(it.getId())
+                .nomeProduto(it.getProduto().getNome())
+                .descricaoProduto(it.getProduto().getDescricao())
+                .quantidade(it.getQuantidade()).build()).toList();
+
+        return CarrinhoResumoDto.builder()
+            .itens(itens)
+            .build();
     }
 }

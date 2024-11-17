@@ -41,7 +41,6 @@ public class UsuarioController {
         usuarioService.deletar(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/dados/login/{login}")
     public ResponseEntity<UsuarioDto> buscarPorId(@PathVariable String login) {
         return ResponseEntity.ok(usuarioService.findByLogin(login));

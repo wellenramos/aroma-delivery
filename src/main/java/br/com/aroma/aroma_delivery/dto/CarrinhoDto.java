@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class CarrinhoDto {
 
+    private Long id;
     private UsuarioDto usuario;
     private List<ItemCarrinhoDto> itens;
 }
