@@ -55,6 +55,8 @@ public class CarrinhoService {
 
         carrinho.getItens().add(itemCarrinho);
         carrinho.setItens(carrinho.getItens());
+        atualizarItensAdicionais(command.getAdicionais(), itemCarrinho);
+
         Carrinho saved = carrinhoRepository.save(carrinho);
         return carrinhoMapper.toDto(saved);
     }
@@ -71,10 +73,33 @@ public class CarrinhoService {
         itemCarrinho.setProduto(produto);
         itemCarrinho.addCarrinho(carrinho);
 
+        configurarItensAdicionais(command.getAdicionais(), itemCarrinho);
         carrinho.setItens(itemCarrinho.getCarrinho().getItens());
 
         Carrinho saved = carrinhoRepository.save(carrinho);
         return carrinhoMapper.toDto(saved);
+    }
+
+    private void configurarItensAdicionais(List<Long> adicionaisIds, ItemCarrinho itemCarrinho) {
+        if (adicionaisIds == null || adicionaisIds.isEmpty()) return;
+
+        adicionaisIds.forEach((it) -> {
+            Produto adicional = produtoRepository.findById(it)
+                .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + it + " não encontrado."));
+            itemCarrinho.getAdicionais().add(adicional);
+        });
+    }
+
+    private void atualizarItensAdicionais(List<Long> adicionaisIds, ItemCarrinho itemCarrinho) {
+        itemCarrinho.getAdicionais().removeIf(item -> !adicionaisIds.contains(item.getId()));
+
+        adicionaisIds.stream()
+            .filter(id -> itemCarrinho.getAdicionais().stream().noneMatch(item -> item.getId().equals(id)))
+            .forEach((it) -> {
+                Produto adicional = produtoRepository.findById(it)
+                    .orElseThrow(() -> new NotFoundException("Produto adicional com ID " + it + " não encontrado."));
+                itemCarrinho.getAdicionais().add(adicional);
+            });
     }
 
     public CarrinhoDto alterarItem(@Valid SalvarItemCarrinhoCommand command) {
@@ -122,7 +147,9 @@ public class CarrinhoService {
                 .id(it.getId())
                 .nomeProduto(it.getProduto().getNome())
                 .descricaoProduto(it.getProduto().getDescricao())
-                .quantidade(it.getQuantidade()).build()).toList();
+                .quantidade(it.getQuantidade())
+                .valorTotal(it.calcularValorTotal())
+                .build()).toList();
 
         return CarrinhoResumoDto.builder()
             .itens(itens)

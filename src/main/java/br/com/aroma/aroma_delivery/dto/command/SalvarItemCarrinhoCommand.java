@@ -3,6 +3,7 @@ package br.com.aroma.aroma_delivery.dto.command;
 import br.com.aroma.aroma_delivery.dto.enums.TamanhoEnum;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +26,6 @@ public class SalvarItemCarrinhoCommand {
 
     @NotNull(message = "O campo tamanhoCopo é obrigatório")
     private TamanhoEnum tamanhoCopo;
+
+    private List<Long> adicionais;
 }

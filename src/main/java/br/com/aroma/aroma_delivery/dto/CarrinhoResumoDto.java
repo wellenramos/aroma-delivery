@@ -26,7 +26,7 @@ public class CarrinhoResumoDto {
     private Long id;
     private String nomeProduto;
     private String descricaoProduto;
-    private BigDecimal preco;
+    private BigDecimal valorTotal;
     private Integer quantidade;
   }
 }
