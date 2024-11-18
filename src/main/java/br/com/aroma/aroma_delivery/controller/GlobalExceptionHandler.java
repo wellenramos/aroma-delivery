@@ -102,6 +102,20 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
   }
 
+  /**
+   * Handles IllegalArgumentException and returns a ResponseEntity object with the appropriate HTTP status
+   * code and error details.
+   *
+   * @param ex The IllegalStateException to be handled.
+   * @return A ResponseEntity object containing a map of errors and the HTTP status code.
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+    Map<String, String> errors = new HashMap<>();
+    errors.put("message", ex.getMessage());
+    return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+  }
+
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
     Map<String, String> errors = new HashMap<>();

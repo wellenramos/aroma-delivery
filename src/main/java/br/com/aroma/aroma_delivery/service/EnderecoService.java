@@ -14,6 +14,8 @@ import br.com.aroma.aroma_delivery.repository.EnderecoBaseRepository;
 import br.com.aroma.aroma_delivery.repository.EnderecoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,12 @@ public class EnderecoService {
         String email = securityService.getAuthenticatedUser().getUsername();
         Usuario usuario = usuarioRepository.findByLogin(email)
             .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        if (command.getPrincipal() && Objects.isNull(command.getId())) {
+            repository.findByUsuarioAndPrincipal(usuario, true).ifPresent((it) -> {
+                throw new IllegalArgumentException("Endereço principal já cadastrado.");
+            });
+        }
 
         endereco.setUsuario(usuario);
 
@@ -80,5 +88,14 @@ public class EnderecoService {
             .uf(viaCep.getUf())
             .build();
         return enderecoBaseRepository.save(endereco);
+    }
+
+    public EnderecoDto obterEnderecoUsuario() {
+        String email = securityService.getAuthenticatedUser().getUsername();
+        Usuario usuario = usuarioRepository.findByLogin(email)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        Optional<Endereco> endereco = repository.findByUsuarioAndPrincipal(usuario,true);
+        return endereco.map(mapper::toDto).orElse(null);
     }
 }

@@ -52,7 +52,7 @@ public class EnderecoController {
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/cep/{cep}")
-    public EnderecoBaseDto consultarPorCep(@PathVariable String cep) {
-        return service.consultarPorCep(cep);
+    public ResponseEntity<EnderecoBaseDto> consultarPorCep(@PathVariable String cep) {
+        return ResponseEntity.ok(service.consultarPorCep(cep));
     }
 }
