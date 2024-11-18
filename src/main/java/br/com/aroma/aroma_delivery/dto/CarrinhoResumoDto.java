@@ -15,6 +15,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CarrinhoResumoDto {
 
+  private BigDecimal subTotal;
+  private BigDecimal valorFrete;
+  private BigDecimal valorTotal;
   private List<ItemCarrinhoResumoDto> itens;
 
   @Getter

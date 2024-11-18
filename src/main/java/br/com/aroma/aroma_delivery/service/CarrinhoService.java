@@ -17,6 +17,7 @@ import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -148,10 +149,17 @@ public class CarrinhoService {
                 .nomeProduto(it.getProduto().getNome())
                 .descricaoProduto(it.getProduto().getDescricao())
                 .quantidade(it.getQuantidade())
-                .valorTotal(it.calcularValorTotal())
+                .valorTotal(it.calcularValorTotalItem())
                 .build()).toList();
 
+        BigDecimal valorFrete = carrinho.valorFrete();
+        BigDecimal subTotal = carrinho.calcularSubtotalPedido();
+        BigDecimal valorTotal = carrinho.calculartotalPedido(subTotal);
+
         return CarrinhoResumoDto.builder()
+            .subTotal(subTotal)
+            .valorTotal(valorTotal)
+            .valorFrete(valorFrete)
             .itens(itens)
             .build();
     }

@@ -73,7 +73,7 @@ public class ItemCarrinho {
     this.carrinho = carrinho;
   }
 
-  public BigDecimal calcularValorTotal() {
+  public BigDecimal calcularValorTotalItem() {
     BigDecimal precoProduto = produto != null ? produto.getPreco() : BigDecimal.ZERO;
 
     BigDecimal somaAdicionais = adicionais.stream()

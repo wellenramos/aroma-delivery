@@ -1,6 +1,7 @@
 package br.com.aroma.aroma_delivery.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,4 +24,18 @@ public class Carrinho {
 
     @OneToMany(mappedBy = "carrinho", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemCarrinho> itens;
+
+    public BigDecimal valorFrete() {
+        return BigDecimal.valueOf(5);
+    }
+
+    public BigDecimal calcularSubtotalPedido() {
+        return itens.stream()
+            .map(ItemCarrinho::calcularValorTotalItem)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal calculartotalPedido(BigDecimal subTotal) {
+        return subTotal.add(valorFrete());
+    }
 }
