@@ -42,6 +42,9 @@ public class Cartao {
   @Column(name = "bandeira")
   private String bandeira;
 
+  @Column(name = "principal")
+  private Boolean principal;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "usuario_id")
   private Usuario usuario;

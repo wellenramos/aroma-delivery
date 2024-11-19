@@ -10,9 +10,3 @@ Authorization: Bearer {{jwt_token}}
   "validadeAno": 2025,
   "cvv": "228"
 }
-
-
-### Excluir endereço por id
-DELETE {{host}}/enderecos/1
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}

@@ -19,6 +19,7 @@ public class CarrinhoResumoDto {
   private BigDecimal valorFrete;
   private BigDecimal valorTotal;
   private EnderecoDto endereco;
+  private CartaoDto cartao;
   private List<ItemCarrinhoResumoDto> itens;
 
   @Getter

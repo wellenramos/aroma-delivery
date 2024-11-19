@@ -3,6 +3,7 @@ package br.com.aroma.aroma_delivery.service;
 import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto.ItemCarrinhoResumoDto;
+import br.com.aroma.aroma_delivery.dto.CartaoDto;
 import br.com.aroma.aroma_delivery.dto.EnderecoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
 import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
@@ -34,6 +35,7 @@ public class CarrinhoService {
     private final ProdutoRepository produtoRepository;
     private final SecurityService securityService;
     private final EnderecoService enderecoService;
+    private final CartaoService cartaoService;
 
     public CarrinhoDto adicionarItem(SalvarItemCarrinhoCommand command) {
         Produto produto = produtoRepository.findById(command.getProdutoId())
@@ -159,12 +161,15 @@ public class CarrinhoService {
         BigDecimal valorTotal = carrinho.calculartotalPedido(subTotal);
 
         EnderecoDto endereco = enderecoService.obterEnderecoUsuario();
+        CartaoDto cartao = cartaoService.findByUsuarioAndPrincipal(
+            carrinho.getUsuario(), true);
 
         return CarrinhoResumoDto.builder()
             .subTotal(subTotal)
             .valorTotal(valorTotal)
             .valorFrete(valorFrete)
             .endereco(endereco)
+            .cartao(cartao)
             .itens(itens)
             .build();
     }

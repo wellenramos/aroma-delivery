@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS Cartao (
     validade_ano SMALLINT NOT NULL,
     cvv VARCHAR(4) NOT NULL,
     bandeira VARCHAR(50),
+    principal BOOLEAN DEFAULT FALSE,
     usuario_id BIGINT NOT NULL,
     CONSTRAINT fk_usuario_cartao FOREIGN KEY (usuario_id) REFERENCES Usuario(id),
     CONSTRAINT numero_unique UNIQUE (numero)

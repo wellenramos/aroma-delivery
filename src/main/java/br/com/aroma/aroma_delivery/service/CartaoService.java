@@ -9,6 +9,7 @@ import br.com.aroma.aroma_delivery.model.Usuario;
 import br.com.aroma.aroma_delivery.repository.CartaoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import br.com.aroma.aroma_delivery.service.strategy.BandeiraCartaoContext;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,10 @@ public class CartaoService {
     Cartao cartao = repository.findById(id)
         .orElseThrow(() -> new NotFoundException("Cartão não encontrado."));
     repository.delete(cartao);
+  }
+
+  public CartaoDto findByUsuarioAndPrincipal(Usuario usuario, boolean principal) {
+    Optional<Cartao> cartao = repository.findByUsuarioAndPrincipal(usuario, principal);
+    return cartao.map(mapper::toDto).orElse(null);
   }
 }

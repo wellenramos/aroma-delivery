@@ -15,6 +15,6 @@ public class CartaoDto {
   private Short validadeAno;
   private String cvv;
   private String bandeira;
+  private Boolean principal;
   private Usuario usuario;
-
 }
