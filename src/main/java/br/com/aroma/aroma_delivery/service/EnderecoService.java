@@ -14,6 +14,8 @@ import br.com.aroma.aroma_delivery.repository.EnderecoBaseRepository;
 import br.com.aroma.aroma_delivery.repository.EnderecoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.validation.Valid;
+
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -97,5 +99,15 @@ public class EnderecoService {
 
         Optional<Endereco> endereco = repository.findByUsuarioAndPrincipal(usuario,true);
         return endereco.map(mapper::toDto).orElse(null);
+    }
+
+
+    public List<EnderecoDto> obterEnderecos() {
+        String email = securityService.getAuthenticatedUser().getUsername();
+        Usuario usuario = usuarioRepository.findByLogin(email)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        List<Endereco> enderecos = repository.findByUsuario(usuario);
+        return mapper.toEnderecosDtoList(enderecos);
     }
 }

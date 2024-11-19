@@ -7,6 +7,8 @@ import br.com.aroma.aroma_delivery.model.Endereco;
 import br.com.aroma.aroma_delivery.model.EnderecoBase;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface EnderecoMapper {
 
@@ -15,4 +17,5 @@ public interface EnderecoMapper {
 
     EnderecoBaseDto toEnderecoBaseDto(EnderecoBase enderecoBase);
     EnderecoBaseDto toEnderecoDto(Endereco endereco);
+    List<EnderecoDto> toEnderecosDtoList(List<Endereco> enderecos);
 }

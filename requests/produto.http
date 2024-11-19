@@ -4,10 +4,10 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "nome": "Nutella",
-  "descricao": "A Original!",
-  "preco": 4.50,
-  "categoriaId": 2,
+  "nome": "Americano Longo",
+  "descricao": "Expresso maior, água quente",
+  "preco": 15.00,
+  "categoriaId": 1,
   "adicionais": []
 }
 

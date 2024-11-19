@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/enderecos")
@@ -54,5 +56,11 @@ public class EnderecoController {
     @GetMapping("/cep/{cep}")
     public ResponseEntity<EnderecoBaseDto> consultarPorCep(@PathVariable String cep) {
         return ResponseEntity.ok(service.consultarPorCep(cep));
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @GetMapping
+    public ResponseEntity<List<EnderecoDto>> obterEnderecos() {
+        return ResponseEntity.ok(service.obterEnderecos());
     }
 }
