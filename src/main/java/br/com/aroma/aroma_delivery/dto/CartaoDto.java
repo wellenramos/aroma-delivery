@@ -11,6 +11,7 @@ public class CartaoDto {
   private Long id;
   private String numero;
   private String titular;
+  private String tipo;
   private Short validadeMes;
   private Short validadeAno;
   private String cvv;

@@ -42,6 +42,9 @@ public class Cartao {
   @Column(name = "bandeira")
   private String bandeira;
 
+  @Column(name = "tipo")
+  private String tipo;
+
   @Column(name = "principal")
   private Boolean principal;
 

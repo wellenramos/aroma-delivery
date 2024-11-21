@@ -40,6 +40,12 @@ public class SalvarCartaoCommand {
   @Size(message = "Limite do campo cvv excedido", max = 4)
   private String cvv;
 
+  @NotBlank(message = "Tipo é obrigatório")
+  @Size(message = "Limite do campo tipo excedido", max = 20)
+  private String tipo;
+
+  private Boolean principal;
+
   public void setNumero(String numero) {
     if (numero != null && !numero.isEmpty()) {
       this.numero = numero.replaceAll(" ", "");

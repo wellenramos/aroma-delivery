@@ -48,8 +48,9 @@ public class EnderecoController {
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
@@ -62,5 +63,11 @@ public class EnderecoController {
     @GetMapping
     public ResponseEntity<List<EnderecoDto>> obterEnderecos() {
         return ResponseEntity.ok(service.obterEnderecos());
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @PutMapping("/{id}/principal")
+    public ResponseEntity<EnderecoDto> marcarEnderecoPrincipal(@PathVariable Long id) {
+        return ResponseEntity.ok(service.marcarEnderecoPrincipal(id));
     }
 }

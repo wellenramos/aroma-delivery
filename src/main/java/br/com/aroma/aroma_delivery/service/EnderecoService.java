@@ -67,6 +67,9 @@ public class EnderecoService {
     public void deletar(Long id) {
         Endereco endereco = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Endereço não encontrado."));
+        if (endereco.getPrincipal()) {
+            throw new IllegalArgumentException("Não é possível excluir o endereço principal");
+        }
         repository.delete(endereco);
     }
 
@@ -109,5 +112,23 @@ public class EnderecoService {
 
         List<Endereco> enderecos = repository.findByUsuario(usuario);
         return mapper.toEnderecosDtoList(enderecos);
+    }
+
+    public EnderecoDto marcarEnderecoPrincipal(Long id) {
+        String email = securityService.getAuthenticatedUser().getUsername();
+        Usuario usuario = usuarioRepository.findByLogin(email)
+            .orElseThrow(() -> new NotFoundException("Usuário não encontrado"));
+
+        Endereco endereco = repository.findByUsuarioAndPrincipal(usuario,true)
+            .orElseThrow(() -> new NotFoundException("Endereço não encontrado"));
+        endereco.setPrincipal(false);
+        repository.save(endereco);
+
+        Endereco novoEnderecoPrincipal = repository.findById(id)
+            .orElseThrow(() -> new NotFoundException("Endereço não encontrado"));
+        novoEnderecoPrincipal.setPrincipal(true);
+        repository.save(novoEnderecoPrincipal);
+
+        return mapper.toDto(novoEnderecoPrincipal);
     }
 }
