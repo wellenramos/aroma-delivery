@@ -33,8 +33,9 @@ public class CartaoController {
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
