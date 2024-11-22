@@ -67,9 +67,6 @@ public class EnderecoService {
     public void deletar(Long id) {
         Endereco endereco = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Endereço não encontrado."));
-        if (endereco.getPrincipal()) {
-            throw new IllegalArgumentException("Não é possível excluir o endereço principal");
-        }
         repository.delete(endereco);
     }
 
