@@ -8,7 +8,8 @@ package br.com.aroma.aroma_delivery.dto.enums;
  * ENTREGUE: Pedido foi entregue ao cliente.
  * CANCELADO: Pedido foi cancelado pelo cliente ou pelo sistema.
  * DEVOLVIDO: Pedido foi devolvido pelo cliente.
+ * CONCLUIDO: Pedido foi finalizado.
  */
 public enum StatusPedidoEnum {
-  PENDENTE, PAGO, PROCESSANDO, ENVIADO, CANCELADO, DEVOLVIDO, ENTREGUE
+  PENDENTE, PAGO, PROCESSANDO, ENVIADO, CANCELADO, DEVOLVIDO, ENTREGUE, CONCLUIDO
 }

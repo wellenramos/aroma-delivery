@@ -1,5 +1,6 @@
 package br.com.aroma.aroma_delivery.controller;
 
+import br.com.aroma.aroma_delivery.dto.AcompanharDto;
 import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
 import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
@@ -31,9 +32,15 @@ public class PedidoController {
     }
 
     @PreAuthorize("hasRole('ROLE_CLIENTE')")
-    @GetMapping
-    public ResponseEntity<List<PedidoDto>> listar() {
-        return ResponseEntity.ok(service.listar());
+    @GetMapping("/acompanhar")
+    public ResponseEntity<List<AcompanharDto>> acompanhar() {
+        return ResponseEntity.ok(service.acompanhar());
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @GetMapping("/historico")
+    public ResponseEntity<List<PedidoDto>> historico() {
+        return ResponseEntity.ok(service.historico());
     }
 
     @PostMapping("/{id}/avaliar")

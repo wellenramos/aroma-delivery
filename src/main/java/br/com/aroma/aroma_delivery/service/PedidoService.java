@@ -1,5 +1,8 @@
 package br.com.aroma.aroma_delivery.service;
 
+import br.com.aroma.aroma_delivery.dto.AcompanharDto;
+import br.com.aroma.aroma_delivery.dto.AcompanharDto.ItemDto;
+import br.com.aroma.aroma_delivery.dto.AcompanharDto.StatusEtapaDto;
 import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
 import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
@@ -22,6 +25,7 @@ import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,10 +60,60 @@ public class PedidoService {
     return mapper.toDto(repository.save(pedido));
   }
 
-  public List<PedidoDto> listar() {
+  public List<AcompanharDto> acompanhar() {
     Usuario usuario = obterUsuarioAutenticado();
-    List<Pedido> pedidos = repository.findAllByUsuario(usuario);
-    return mapper.toDtoList(pedidos);
+    List<Pedido> pedidos = repository.findAllByUsuarioAndStatusNotIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
+
+    return pedidos.stream().map(pedido -> {
+
+      List<ItemDto> itens = pedido.getItens().stream().map(item ->
+          ItemDto.builder()
+          .id(item.getId())
+          .nome(item.getProduto().getNome())
+          .descricao(item.getProduto().getDescricao())
+          .preco(item.calcularValorTotalItem())
+          .build()).toList();
+
+      List<StatusEtapaDto> etapas = mapearEtapas(pedido.getStatus());
+
+      return AcompanharDto.builder()
+          .id(pedido.getId())
+          .itens(itens)
+          .valorTotal(pedido.getValorTotal())
+          .etapas(etapas)
+          .build();
+    }).toList();
+  }
+
+  private List<StatusEtapaDto> mapearEtapas(StatusPedidoEnum status) {
+    List<StatusEtapaDto> etapas = new ArrayList<>();
+
+    etapas.add(StatusEtapaDto.builder()
+        .etapa("Pedido foi criado")
+        .completo(status.ordinal() >= StatusPedidoEnum.PENDENTE.ordinal())
+        .build());
+
+    etapas.add(StatusEtapaDto.builder()
+        .etapa("Pagamento concluído")
+        .completo(status.ordinal() >= StatusPedidoEnum.PAGO.ordinal())
+        .build());
+
+    etapas.add(StatusEtapaDto.builder()
+        .etapa("Pedido está sendo preparado")
+        .completo(status.ordinal() >= StatusPedidoEnum.PROCESSANDO.ordinal())
+        .build());
+
+    etapas.add(StatusEtapaDto.builder()
+        .etapa("Pedido foi enviado")
+        .completo(status.ordinal() >= StatusPedidoEnum.ENVIADO.ordinal())
+        .build());
+
+    etapas.add(StatusEtapaDto.builder()
+        .etapa("Pedido foi entregue")
+        .completo(status == StatusPedidoEnum.ENTREGUE)
+        .build());
+
+    return etapas;
   }
 
   public AvaliacaoDto avaliar(Long pedidoId, AvaliacaoPedidoCommand command) {
@@ -87,7 +141,7 @@ public class PedidoService {
         .usuario(usuario)
         .endereco(endereco)
         .dataSolicitacao(LocalDate.now())
-        .status(StatusPedidoEnum.PENDENTE)
+        .status(StatusPedidoEnum.PAGO)
         .valorTotal(calcularValorTotal(itens))
         .favorito(false)
         .itens(itens)
@@ -104,7 +158,7 @@ public class PedidoService {
         .pedido(pedido)
         .cartao(cartao)
         .valor(pedido.getValorTotal())
-        .status(StatusPagamentoEnum.PENDENTE)
+        .status(StatusPagamentoEnum.APROVADO)
         .dataPagamento(LocalDate.now())
         .metodoPagamento("CARTAO")
         .build();
@@ -115,5 +169,11 @@ public class PedidoService {
     return itens.stream()
         .map(item -> item.getProduto().getPreco().multiply(new BigDecimal(item.getQuantidade())))
         .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
+
+  public List<PedidoDto> historico() {
+    Usuario usuario = obterUsuarioAutenticado();
+    List<Pedido> pedidos = repository.findAllByUsuarioAndStatusIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
+    return mapper.toDtoList(pedidos);
   }
 }

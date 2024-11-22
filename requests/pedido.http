@@ -10,7 +10,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ### Obter todos pedidos do usuario
-GET {{host}}/pedidos
+GET {{host}}/pedidos/acompanhar
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
