@@ -12,6 +12,7 @@ public class HistoricoDto {
 
   private Long id;
   private String status;
+  private Integer notaAvaliacao;
   private List<ItemHistoricoDto> itens;
 
   @Getter

@@ -1,9 +1,7 @@
 package br.com.aroma.aroma_delivery.controller;
 
-import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
-import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
 import br.com.aroma.aroma_delivery.service.PedidoService;
 import jakarta.validation.Valid;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -37,10 +36,10 @@ public class PedidoController {
         return ResponseEntity.ok(service.acompanharMeusPedidos());
     }
 
-    @PostMapping("/{id}/avaliar")
-    public ResponseEntity<AvaliacaoDto> avaliar(@PathVariable Long id,
-        @RequestBody @Valid AvaliacaoPedidoCommand command) {
-        return ResponseEntity.ok(service.avaliar(id, command));
+    @PutMapping("/{id}/avaliar")
+    public ResponseEntity<Void> avaliar(@PathVariable Long id, @RequestParam Integer nota) {
+        service.avaliar(id, nota);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/confirmar-recebimento")

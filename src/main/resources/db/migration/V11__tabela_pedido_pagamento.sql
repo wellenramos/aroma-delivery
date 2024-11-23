@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS Pedido (
     status VARCHAR(50) NOT NULL,
     valor_total DECIMAL(10, 2) NOT NULL,
     favorito BOOLEAN DEFAULT FALSE,
+    nota_avaliacao INT,
     CONSTRAINT fk_usuario_pedido FOREIGN KEY (usuario_id) REFERENCES Usuario(id),
     CONSTRAINT fk_endereco_pedido FOREIGN KEY (endereco_id) REFERENCES Endereco(id)
 );

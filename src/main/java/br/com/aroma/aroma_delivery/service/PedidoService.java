@@ -3,14 +3,12 @@ package br.com.aroma.aroma_delivery.service;
 import br.com.aroma.aroma_delivery.dto.AcompanharDto;
 import br.com.aroma.aroma_delivery.dto.AcompanharDto.ItemDto;
 import br.com.aroma.aroma_delivery.dto.AcompanharDto.StatusEtapaDto;
-import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoAgrupadoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto.ItemHistoricoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto.PedidoResumoDtoBuilder;
-import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPagamentoEnum;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPedidoEnum;
@@ -48,7 +46,6 @@ public class PedidoService {
   private final EnderecoRepository enderecoRepository;
   private final ItemCarrinhoRepository itemCarrinhoRepository;
   private final CartaoRepository cartaoRepository;
-  private final AvaliacaoService avaliacaoService;
   private final PedidoMapper mapper;
 
 
@@ -87,6 +84,7 @@ public class PedidoService {
         .map(pedido -> HistoricoDto.builder()
             .id(pedido.getId())
             .status(pedido.getStatus().name())
+            .notaAvaliacao(pedido.getNotaAvaliacao())
             .itens(pedido.getItens().stream()
                 .map(it -> ItemHistoricoDto.builder()
                     .id(it.getId())
@@ -136,8 +134,11 @@ public class PedidoService {
     }).toList();
   }
 
-  public AvaliacaoDto avaliar(Long pedidoId, AvaliacaoPedidoCommand command) {
-    return avaliacaoService.avaliar(pedidoId, command);
+  public void avaliar(Long pedidoId, Integer nota) {
+    Pedido pedido = repository.findById(pedidoId)
+        .orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
+    pedido.setNotaAvaliacao(nota);
+    repository.save(pedido);
   }
 
   private Usuario obterUsuarioAutenticado() {

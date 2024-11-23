@@ -61,6 +61,9 @@ public class Pedido {
   @Column(name = "favorito")
   private Boolean favorito;
 
+  @Column(name = "nota_avaliacao")
+  private Integer notaAvaliacao;
+
   @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
   private Pagamento pagamento;
 
