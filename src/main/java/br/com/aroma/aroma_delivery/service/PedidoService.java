@@ -109,7 +109,7 @@ public class PedidoService {
         .entrySet().stream()
         .map(entry -> HistoricoAgrupadoDto.builder()
             .dataSolicitacao(StringUtil.capitalizeFirstLetter(entry.getKey()))
-            .historico(entry.getValue())
+            .itens(entry.getValue())
             .build())
         .toList();
   }

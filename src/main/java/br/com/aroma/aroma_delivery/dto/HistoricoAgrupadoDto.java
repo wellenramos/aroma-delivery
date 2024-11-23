@@ -11,5 +11,5 @@ import lombok.Setter;
 public class HistoricoAgrupadoDto {
 
   private String dataSolicitacao;
-  private List<HistoricoDto> historico;
+  private List<HistoricoDto> itens;
 }
