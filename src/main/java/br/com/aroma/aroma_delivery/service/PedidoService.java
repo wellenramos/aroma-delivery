@@ -4,7 +4,12 @@ import br.com.aroma.aroma_delivery.dto.AcompanharDto;
 import br.com.aroma.aroma_delivery.dto.AcompanharDto.ItemDto;
 import br.com.aroma.aroma_delivery.dto.AcompanharDto.StatusEtapaDto;
 import br.com.aroma.aroma_delivery.dto.AvaliacaoDto;
+import br.com.aroma.aroma_delivery.dto.HistoricoAgrupadoDto;
+import br.com.aroma.aroma_delivery.dto.HistoricoDto;
+import br.com.aroma.aroma_delivery.dto.HistoricoDto.ItemHistoricoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
+import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
+import br.com.aroma.aroma_delivery.dto.PedidoResumoDto.PedidoResumoDtoBuilder;
 import br.com.aroma.aroma_delivery.dto.command.AvaliacaoPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPagamentoEnum;
@@ -22,11 +27,14 @@ import br.com.aroma.aroma_delivery.repository.EnderecoRepository;
 import br.com.aroma.aroma_delivery.repository.ItemCarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.PedidoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
+import ch.qos.logback.core.util.StringUtil;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,21 +68,64 @@ public class PedidoService {
     return mapper.toDto(repository.save(pedido));
   }
 
-  public List<AcompanharDto> acompanhar() {
+  public PedidoResumoDto acompanharMeusPedidos() {
     Usuario usuario = obterUsuarioAutenticado();
     List<Pedido> pedidos = repository.findAllByUsuarioAndStatusNotIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
+    PedidoResumoDtoBuilder builder = PedidoResumoDto.builder();
 
+    if (!pedidos.isEmpty())
+      return builder.pedidosEmAndamento(montarPedidosEmAndamento(pedidos)).historico(List.of()).build();
+    return builder.historico(montarHistoricoAgrupado(usuario)).pedidosEmAndamento(List.of()).build();
+  }
+
+  public List<HistoricoAgrupadoDto> montarHistoricoAgrupado(Usuario usuario) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", new Locale("pt", "BR"));
+
+    List<Pedido> pedidos = repository.findAllByUsuarioAndStatusIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
+
+    List<HistoricoDto> historicos = pedidos.stream()
+        .map(pedido -> HistoricoDto.builder()
+            .id(pedido.getId())
+            .status(pedido.getStatus().name())
+            .itens(pedido.getItens().stream()
+                .map(it -> ItemHistoricoDto.builder()
+                    .id(it.getId())
+                    .nome(it.getProduto().getNome())
+                    .quantidade(it.getQuantidade())
+                    .build())
+                .toList())
+            .build())
+        .toList();
+
+    return historicos.stream()
+        .collect(Collectors.groupingBy(historicoDto ->
+            pedidos.stream()
+                .filter(p -> p.getId().equals(historicoDto.getId()))
+                .findFirst()
+                .map(Pedido::getDataSolicitacao)
+                .orElseThrow(() -> new IllegalStateException("Pedido não encontrado"))
+                .format(formatter)
+        ))
+        .entrySet().stream()
+        .map(entry -> HistoricoAgrupadoDto.builder()
+            .dataSolicitacao(StringUtil.capitalizeFirstLetter(entry.getKey()))
+            .historico(entry.getValue())
+            .build())
+        .toList();
+  }
+
+  private List<AcompanharDto> montarPedidosEmAndamento(List<Pedido> pedidos) {
     return pedidos.stream().map(pedido -> {
 
       List<ItemDto> itens = pedido.getItens().stream().map(item ->
           ItemDto.builder()
-          .id(item.getId())
-          .nome(item.getProduto().getNome())
-          .descricao(item.getProduto().getDescricao())
-          .preco(item.calcularValorTotalItem())
-          .build()).toList();
+              .id(item.getId())
+              .nome(item.getProduto().getNome())
+              .descricao(item.getProduto().getDescricao())
+              .preco(item.calcularValorTotalItem())
+              .build()).toList();
 
-      List<StatusEtapaDto> etapas = mapearEtapas(pedido.getStatus());
+      List<StatusEtapaDto> etapas = new EtapaPedido(pedido.getStatus()).processar();
 
       return AcompanharDto.builder()
           .id(pedido.getId())
@@ -83,37 +134,6 @@ public class PedidoService {
           .etapas(etapas)
           .build();
     }).toList();
-  }
-
-  private List<StatusEtapaDto> mapearEtapas(StatusPedidoEnum status) {
-    List<StatusEtapaDto> etapas = new ArrayList<>();
-
-    etapas.add(StatusEtapaDto.builder()
-        .etapa("Pedido foi criado")
-        .completo(status.ordinal() >= StatusPedidoEnum.PENDENTE.ordinal())
-        .build());
-
-    etapas.add(StatusEtapaDto.builder()
-        .etapa("Pagamento concluído")
-        .completo(status.ordinal() >= StatusPedidoEnum.PAGO.ordinal())
-        .build());
-
-    etapas.add(StatusEtapaDto.builder()
-        .etapa("Pedido está sendo preparado")
-        .completo(status.ordinal() >= StatusPedidoEnum.PROCESSANDO.ordinal())
-        .build());
-
-    etapas.add(StatusEtapaDto.builder()
-        .etapa("Pedido foi enviado")
-        .completo(status.ordinal() >= StatusPedidoEnum.ENVIADO.ordinal())
-        .build());
-
-    etapas.add(StatusEtapaDto.builder()
-        .etapa("Pedido foi entregue")
-        .completo(status == StatusPedidoEnum.ENTREGUE)
-        .build());
-
-    return etapas;
   }
 
   public AvaliacaoDto avaliar(Long pedidoId, AvaliacaoPedidoCommand command) {
@@ -133,7 +153,7 @@ public class PedidoService {
 
   private Cartao obterCartao(Long cartaoId) {
     return cartaoRepository.findById(cartaoId)
-        .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
+        .orElseThrow(() -> new NotFoundException("Cartão não encontrado"));
   }
 
   private Pedido criarPedido(Usuario usuario, Endereco endereco, List<ItemCarrinho> itens) {
@@ -171,9 +191,12 @@ public class PedidoService {
         .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
-  public List<PedidoDto> historico() {
-    Usuario usuario = obterUsuarioAutenticado();
-    List<Pedido> pedidos = repository.findAllByUsuarioAndStatusIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
-    return mapper.toDtoList(pedidos);
+  public PedidoDto confimarRecebimento(Long id) {
+    Pedido pedido = repository.findById(id)
+        .orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
+
+    pedido.setStatus(StatusPedidoEnum.CONCLUIDO);
+    repository.save(pedido);
+    return mapper.toDto(pedido);
   }
 }
