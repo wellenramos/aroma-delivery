@@ -11,5 +11,6 @@ CREATE TABLE IF NOT EXISTS Produto (
     descricao VARCHAR(500),
     preco FLOAT NOT NULL,
     categoria_id BIGINT,
+    media_avaliacao FLOAT,
     CONSTRAINT fk_categoria FOREIGN KEY (categoria_id) REFERENCES categoria(id)
 );

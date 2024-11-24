@@ -47,6 +47,9 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private SituacaoProdutoEnum situacao;
 
+    @Column(name = "media_avaliacao")
+    private BigDecimal mediaAvaliacao;
+
     @ManyToMany
     @JoinTable(
         name = "produto_adicional",

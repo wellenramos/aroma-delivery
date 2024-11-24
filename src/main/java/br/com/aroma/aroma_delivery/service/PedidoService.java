@@ -24,6 +24,7 @@ import br.com.aroma.aroma_delivery.repository.CartaoRepository;
 import br.com.aroma.aroma_delivery.repository.EnderecoRepository;
 import br.com.aroma.aroma_delivery.repository.ItemCarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.PedidoRepository;
+import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import ch.qos.logback.core.util.StringUtil;
 import jakarta.transaction.Transactional;
@@ -47,6 +48,7 @@ public class PedidoService {
   private final ItemCarrinhoRepository itemCarrinhoRepository;
   private final CartaoRepository cartaoRepository;
   private final PedidoMapper mapper;
+  private final ProdutoRepository produtoRepository;
 
 
   @Transactional
@@ -134,10 +136,16 @@ public class PedidoService {
     }).toList();
   }
 
+  @Transactional
   public void avaliar(Long pedidoId, Integer nota) {
     Pedido pedido = repository.findById(pedidoId)
         .orElseThrow(() -> new NotFoundException("Pedido não encontrado"));
     pedido.setNotaAvaliacao(nota);
+
+    List<Long> produtoIds = pedido.getItens().stream()
+        .map(it -> it.getProduto().getId()).toList();
+
+    produtoRepository.calcularMedidoProdutos(produtoIds);
     repository.save(pedido);
   }
 

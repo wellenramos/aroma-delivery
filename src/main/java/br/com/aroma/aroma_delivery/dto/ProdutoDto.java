@@ -23,6 +23,7 @@ public class ProdutoDto {
     private String descricao;
     private BigDecimal preco;
     private Categoria categoria;
+    private BigDecimal mediaAvaliacao;
     private SituacaoProdutoEnum situacao;
     private List<ProdutoResumidoDto> adicionais;
 }
