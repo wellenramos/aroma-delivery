@@ -3,6 +3,7 @@ package br.com.aroma.aroma_delivery.service;
 import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto.ItemCarrinhoResumoDto;
+import br.com.aroma.aroma_delivery.dto.CarrinhoResumoItemDto;
 import br.com.aroma.aroma_delivery.dto.CartaoDto;
 import br.com.aroma.aroma_delivery.dto.EnderecoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
@@ -132,7 +133,7 @@ public class CarrinhoService {
         carrinhoRepository.save(carrinho);
     }
 
-    public void atualizarQuantidadeItens(Long carrinhoId, Long itemId, Integer quantidade) {
+    public CarrinhoResumoItemDto atualizarQuantidadeItens(Long carrinhoId, Long itemId, Integer quantidade) {
         Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
                 .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
 
@@ -140,7 +141,26 @@ public class CarrinhoService {
             .filter(it -> it.getId().equals(itemId))
             .forEach(item -> item.setQuantidade(quantidade));
 
-        carrinhoRepository.save(carrinho);
+        Carrinho saved = carrinhoRepository.save(carrinho);
+
+        ItemCarrinho itemCarrinho = saved.getItens().stream()
+            .filter(it -> it.getId().equals(itemId)).findFirst().get();
+
+        BigDecimal subTotal = saved.calcularSubtotalPedido();
+        BigDecimal valorTotal = saved.calculartotalPedido(subTotal);
+
+        return CarrinhoResumoItemDto.builder()
+            .valorTotal(valorTotal)
+            .subTotal(subTotal)
+            .item(ItemCarrinhoResumoDto.builder()
+                .id(itemCarrinho.getId())
+                .produtoId(itemCarrinho.getProduto().getId())
+                .nomeProduto(itemCarrinho.getProduto().getNome())
+                .descricaoProduto(itemCarrinho.getProduto().getDescricao())
+                .quantidade(itemCarrinho.getQuantidade())
+                .valorTotal(itemCarrinho.calcularValorTotalItem())
+                .build())
+            .build();
     }
 
     public CarrinhoResumoDto resumo(Long carrinhoId) {
@@ -150,6 +170,7 @@ public class CarrinhoService {
         List<ItemCarrinhoResumoDto> itens = carrinho.getItens().stream()
             .map(it -> ItemCarrinhoResumoDto.builder()
                 .id(it.getId())
+                .produtoId(it.getProduto().getId())
                 .nomeProduto(it.getProduto().getNome())
                 .descricaoProduto(it.getProduto().getDescricao())
                 .quantidade(it.getQuantidade())

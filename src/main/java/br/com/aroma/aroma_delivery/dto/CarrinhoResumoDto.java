@@ -29,6 +29,7 @@ public class CarrinhoResumoDto {
   @AllArgsConstructor
   public static class ItemCarrinhoResumoDto {
     private Long id;
+    private Long produtoId;
     private String nomeProduto;
     private String descricaoProduto;
     private BigDecimal valorTotal;
