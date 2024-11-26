@@ -36,12 +36,14 @@ public class PedidoController {
         return ResponseEntity.ok(service.acompanharMeusPedidos());
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @PutMapping("/{id}/avaliar")
     public ResponseEntity<Void> avaliar(@PathVariable Long id, @RequestParam Integer nota) {
         service.avaliar(id, nota);
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @PutMapping("/{id}/confirmar-recebimento")
     public ResponseEntity<PedidoDto> confimarRecebimento(@PathVariable Long id) {
         return ResponseEntity.ok(service.confimarRecebimento(id));
