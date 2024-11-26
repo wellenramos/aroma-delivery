@@ -58,9 +58,6 @@ public class Pedido {
   @Column(name = "valor_total")
   private BigDecimal valorTotal;
 
-  @Column(name = "favorito")
-  private Boolean favorito;
-
   @Column(name = "nota_avaliacao")
   private Integer notaAvaliacao;
 

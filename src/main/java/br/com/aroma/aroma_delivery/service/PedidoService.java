@@ -172,7 +172,6 @@ public class PedidoService {
         .dataSolicitacao(LocalDate.now())
         .status(StatusPedidoEnum.PAGO)
         .valorTotal(calcularValorTotal(itens))
-        .favorito(false)
         .itens(itens)
         .build();
   }
