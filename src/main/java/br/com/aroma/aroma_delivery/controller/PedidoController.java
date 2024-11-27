@@ -51,10 +51,4 @@ public class PedidoController {
     public ResponseEntity<PedidoDto> confimarRecebimento(@PathVariable Long id) {
         return ResponseEntity.ok(service.confimarRecebimento(id));
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin/pedidos")
-    public ResponseEntity<List<PedidoResumoAdminDto>> listarPedidosPorSituacao(@RequestParam StatusPedidoEnum status) {
-        return ResponseEntity.ok(service.listarPedidosPorSituacao(status));
-    }
 }

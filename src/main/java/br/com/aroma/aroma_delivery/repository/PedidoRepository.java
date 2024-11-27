@@ -14,5 +14,5 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
   List<Pedido> findAllByUsuarioAndStatusIn(Usuario usuario, List<StatusPedidoEnum> status);
 
-  List<Pedido> findByStatus(StatusPedidoEnum status);
+  List<Pedido> findByStatusIn(List<StatusPedidoEnum> status);
 }

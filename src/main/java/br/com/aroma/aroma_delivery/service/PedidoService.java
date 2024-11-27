@@ -7,7 +7,6 @@ import br.com.aroma.aroma_delivery.dto.HistoricoAgrupadoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto.ItemHistoricoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
-import br.com.aroma.aroma_delivery.dto.PedidoResumoAdminDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto.PedidoResumoDtoBuilder;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
@@ -208,16 +207,5 @@ public class PedidoService {
     pedido.setStatus(StatusPedidoEnum.CONCLUIDO);
     repository.save(pedido);
     return mapper.toDto(pedido);
-  }
-
-  public List<PedidoResumoAdminDto> listarPedidosPorSituacao(StatusPedidoEnum status) {
-    List<Pedido> pedidos = repository.findByStatus(status);
-    return pedidos.stream().map(it -> PedidoResumoAdminDto.builder()
-        .id(it.getId())
-        .dataPedido(formatter.format(it.getDataSolicitacao()))
-        .usuarioSolicitante(it.getUsuario().getNome())
-        .valorTotal(it.getValorTotal())
-        .build())
-        .toList();
   }
 }
