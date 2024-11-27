@@ -16,7 +16,10 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     List<Produto> findByCategoria(Categoria categoria);
 
     @Query("SELECT p FROM Produto p WHERE p.categoria.id = :categoriaId AND CAST(unaccent(LOWER(p.nome)) AS text) LIKE CONCAT('%', CAST(unaccent(LOWER(:nome)) AS text), '%')")
-    List<Produto> buscarPorNome(Long categoriaId, String nome);
+    List<Produto> buscarPorNomeECategoria(Long categoriaId, String nome);
+
+    @Query("SELECT p FROM Produto p WHERE CAST(unaccent(LOWER(p.nome)) AS text) LIKE CONCAT('%', CAST(unaccent(LOWER(:nome)) AS text), '%')")
+    List<Produto> buscarPorNome(String nome);
 
     @Modifying
     @Query("UPDATE Produto p SET p.mediaAvaliacao = (" +

@@ -97,12 +97,12 @@ public class ProdutoService {
         return mapper.toDtoList(produtos);
     }
 
-    public List<ProdutoDto> buscarPorNome(Long categoriaId, String nome) {
+    public List<ProdutoDto> buscarPorNomeECategoria(Long categoriaId, String nome) {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
 
         if (Objects.nonNull(nome) && !nome.isEmpty())
-            return mapper.toDtoList(repository.buscarPorNome(categoria.getId(), nome));
+            return mapper.toDtoList(repository.buscarPorNomeECategoria(categoria.getId(), nome));
         return mapper.toDtoList(repository.findByCategoria(categoria));
     }
 
@@ -112,5 +112,23 @@ public class ProdutoService {
         produto.setSituacao(SituacaoProdutoEnum.PUBLICADO);
         repository.save(produto);
         return mapper.toDto(produto);
+    }
+
+    public List<ProdutoDto> buscarTodosProdutos() {
+        List<Produto> produtos = repository.findAll();
+        return produtos.stream().map(it ->
+            ProdutoDto.builder()
+                .id(it.getId())
+                .nome(it.getNome())
+                .descricao(it.getDescricao())
+                .preco(it.getPreco())
+                .build()
+        ).toList();
+    }
+
+    public List<ProdutoDto> buscarTodosPorNome(String nome) {
+        if (Objects.nonNull(nome) && !nome.isEmpty())
+            return mapper.toDtoList(repository.buscarPorNome(nome));
+        return mapper.toDtoList(repository.findAll());
     }
 }

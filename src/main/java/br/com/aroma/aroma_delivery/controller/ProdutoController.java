@@ -5,7 +5,6 @@ import br.com.aroma.aroma_delivery.dto.command.SalvarProdutoCommand;
 import br.com.aroma.aroma_delivery.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -50,11 +49,11 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
     @GetMapping("/categoria/{categoriaId}/todos")
-    public ResponseEntity<List<ProdutoDto>> buscarPorNome(@PathVariable Long categoriaId,
+    public ResponseEntity<List<ProdutoDto>> buscarPorNomeECategoria(@PathVariable Long categoriaId,
                                                           @RequestParam(required = false) String nome) {
-        return ResponseEntity.ok(produtoService.buscarPorNome(categoriaId, nome));
+        return ResponseEntity.ok(produtoService.buscarPorNomeECategoria(categoriaId, nome));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -63,5 +62,16 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.publicar(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/todos")
+    public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
+        return ResponseEntity.ok(produtoService.buscarTodosProdutos());
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/todos-produtos")
+    public ResponseEntity<List<ProdutoDto>> buscarTodosPorNome(@RequestParam(required = false) String nome) {
+        return ResponseEntity.ok(produtoService.buscarTodosPorNome(nome));
+    }
 }
 
