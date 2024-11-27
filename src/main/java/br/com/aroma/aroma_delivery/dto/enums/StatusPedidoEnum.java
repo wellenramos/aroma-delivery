@@ -11,5 +11,5 @@ package br.com.aroma.aroma_delivery.dto.enums;
  * CONCLUIDO: Pedido foi finalizado.
  */
 public enum StatusPedidoEnum {
-  PENDENTE, PAGO, PROCESSANDO, ENVIADO, CANCELADO, DEVOLVIDO, ENTREGUE, CONCLUIDO
+  PENDENTE, PAGO, EM_ANDAMENTO, ENVIADO, CANCELADO, DEVOLVIDO, ENTREGUE, CONCLUIDO
 }

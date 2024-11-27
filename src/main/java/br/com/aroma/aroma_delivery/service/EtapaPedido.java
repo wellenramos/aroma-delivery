@@ -28,7 +28,7 @@ public class EtapaPedido {
 
     etapas.add(StatusEtapaDto.builder()
         .etapa("Pedido está sendo preparado")
-        .completo(status.ordinal() >= StatusPedidoEnum.PROCESSANDO.ordinal())
+        .completo(status.ordinal() >= StatusPedidoEnum.EM_ANDAMENTO.ordinal())
         .build());
 
     etapas.add(StatusEtapaDto.builder()

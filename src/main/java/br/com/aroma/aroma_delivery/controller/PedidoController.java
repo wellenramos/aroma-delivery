@@ -1,10 +1,13 @@
 package br.com.aroma.aroma_delivery.controller;
 
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
+import br.com.aroma.aroma_delivery.dto.PedidoResumoAdminDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
+import br.com.aroma.aroma_delivery.dto.enums.StatusPedidoEnum;
 import br.com.aroma.aroma_delivery.service.PedidoService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,5 +50,11 @@ public class PedidoController {
     @PutMapping("/{id}/confirmar-recebimento")
     public ResponseEntity<PedidoDto> confimarRecebimento(@PathVariable Long id) {
         return ResponseEntity.ok(service.confimarRecebimento(id));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/pedidos")
+    public ResponseEntity<List<PedidoResumoAdminDto>> listarPedidosPorSituacao(@RequestParam StatusPedidoEnum status) {
+        return ResponseEntity.ok(service.listarPedidosPorSituacao(status));
     }
 }

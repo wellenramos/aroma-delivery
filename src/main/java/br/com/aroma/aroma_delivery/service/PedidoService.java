@@ -7,6 +7,7 @@ import br.com.aroma.aroma_delivery.dto.HistoricoAgrupadoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto;
 import br.com.aroma.aroma_delivery.dto.HistoricoDto.ItemHistoricoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoDto;
+import br.com.aroma.aroma_delivery.dto.PedidoResumoAdminDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto;
 import br.com.aroma.aroma_delivery.dto.PedidoResumoDto.PedidoResumoDtoBuilder;
 import br.com.aroma.aroma_delivery.dto.command.SalvarPedidoCommand;
@@ -14,6 +15,7 @@ import br.com.aroma.aroma_delivery.dto.enums.StatusPagamentoEnum;
 import br.com.aroma.aroma_delivery.dto.enums.StatusPedidoEnum;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
 import br.com.aroma.aroma_delivery.mapper.PedidoMapper;
+import br.com.aroma.aroma_delivery.mapper.PedidoMapperImpl;
 import br.com.aroma.aroma_delivery.model.Cartao;
 import br.com.aroma.aroma_delivery.model.Endereco;
 import br.com.aroma.aroma_delivery.model.ItemCarrinho;
@@ -49,7 +51,9 @@ public class PedidoService {
   private final CartaoRepository cartaoRepository;
   private final PedidoMapper mapper;
   private final ProdutoRepository produtoRepository;
+  private final PedidoMapperImpl pedidoMapperImpl;
 
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", new Locale("pt", "BR"));
 
   @Transactional
   public PedidoDto salvar(SalvarPedidoCommand command) {
@@ -78,8 +82,6 @@ public class PedidoService {
   }
 
   public List<HistoricoAgrupadoDto> montarHistoricoAgrupado(Usuario usuario) {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", new Locale("pt", "BR"));
-
     List<Pedido> pedidos = repository.findAllByUsuarioAndStatusIn(usuario, List.of(StatusPedidoEnum.CONCLUIDO));
 
     List<HistoricoDto> historicos = pedidos.stream()
@@ -170,7 +172,7 @@ public class PedidoService {
         .usuario(usuario)
         .endereco(endereco)
         .dataSolicitacao(LocalDate.now())
-        .status(StatusPedidoEnum.PAGO)
+        .status(StatusPedidoEnum.PENDENTE)
         .valorTotal(calcularValorTotal(itens))
         .itens(itens)
         .build();
@@ -206,5 +208,16 @@ public class PedidoService {
     pedido.setStatus(StatusPedidoEnum.CONCLUIDO);
     repository.save(pedido);
     return mapper.toDto(pedido);
+  }
+
+  public List<PedidoResumoAdminDto> listarPedidosPorSituacao(StatusPedidoEnum status) {
+    List<Pedido> pedidos = repository.findByStatus(status);
+    return pedidos.stream().map(it -> PedidoResumoAdminDto.builder()
+        .id(it.getId())
+        .dataPedido(formatter.format(it.getDataSolicitacao()))
+        .usuarioSolicitante(it.getUsuario().getNome())
+        .valorTotal(it.getValorTotal())
+        .build())
+        .toList();
   }
 }
