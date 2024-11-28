@@ -31,31 +31,6 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.alterar(command));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
-    @GetMapping("/{id}")
-    public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(produtoService.obterPorId(id));
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
-        produtoService.deletar(id);
-    }
-
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
-    @GetMapping("/categoria/{categoriaId}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId) {
-        return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
-    }
-
-    @PreAuthorize("hasRole('ROLE_CLIENTE')")
-    @GetMapping("/categoria/{categoriaId}/todos")
-    public ResponseEntity<List<ProdutoDto>> buscarPorNomeECategoria(@PathVariable Long categoriaId,
-                                                          @RequestParam(required = false) String nome) {
-        return ResponseEntity.ok(produtoService.buscarPorNomeECategoria(categoriaId, nome));
-    }
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}/publicar")
     public ResponseEntity<ProdutoDto> publicar(@PathVariable Long id) {
@@ -72,6 +47,37 @@ public class ProdutoController {
     @GetMapping("/todos-produtos")
     public ResponseEntity<List<ProdutoDto>> buscarTodosPorNome(@RequestParam(required = false) String nome) {
         return ResponseEntity.ok(produtoService.buscarTodosPorNome(nome));
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/adicionais")
+    public ResponseEntity<List<ProdutoDto>> buscarAdicionais() {
+        return ResponseEntity.ok(produtoService.buscarAdicionais());
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        produtoService.deletar(id);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_CLIENTE')")
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.obterPorId(id));
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @GetMapping("/categoria/{categoriaId}")
+    public ResponseEntity<List<ProdutoDto>> buscarPorCategoria(@PathVariable Long categoriaId) {
+        return ResponseEntity.ok(produtoService.buscarPorCategoria(categoriaId));
+    }
+
+    @PreAuthorize("hasRole('ROLE_CLIENTE')")
+    @GetMapping("/categoria/{categoriaId}/todos")
+    public ResponseEntity<List<ProdutoDto>> buscarPorNomeECategoria(@PathVariable Long categoriaId,
+                                                          @RequestParam(required = false) String nome) {
+        return ResponseEntity.ok(produtoService.buscarPorNomeECategoria(categoriaId, nome));
     }
 }
 

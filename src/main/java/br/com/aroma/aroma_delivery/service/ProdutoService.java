@@ -8,7 +8,10 @@ import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
+import br.com.aroma.aroma_delivery.repository.FavoritoRepository;
+import br.com.aroma.aroma_delivery.repository.ItemCarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Objects;
@@ -84,9 +87,19 @@ public class ProdutoService {
         return mapper.toDto(produto);
     }
 
+    @Transactional
     public void deletar(Long id) {
         Produto produto = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Produto não encontrado."));
+
+        if (SituacaoProdutoEnum.PUBLICADO.equals(produto.getSituacao())) {
+            throw new IllegalArgumentException("Não é possível excluir um produto já publicado");
+        }
+
+        if (repository.verificarAdicionaisByProdutoId(produto.getId())) {
+            repository.deleteAdicionaisByProdutoId(produto.getId());
+        }
+
         repository.delete(produto);
     }
 
@@ -130,5 +143,11 @@ public class ProdutoService {
         if (Objects.nonNull(nome) && !nome.isEmpty())
             return mapper.toDtoList(repository.buscarPorNome(nome));
         return mapper.toDtoList(repository.findAll());
+    }
+
+    public List<ProdutoDto> buscarAdicionais() {
+        Categoria categoria = categoriaRepository.findById(4L)
+            .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
+        return mapper.toDtoList(repository.findByCategoria(categoria));
     }
 }

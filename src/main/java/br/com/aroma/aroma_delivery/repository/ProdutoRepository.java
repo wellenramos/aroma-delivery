@@ -3,12 +3,11 @@ package br.com.aroma.aroma_delivery.repository;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import feign.Param;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
@@ -31,4 +30,10 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
         ") WHERE p.id IN :productIds")
     void calcularMedidoProdutos(@Param("productIds") List<Long> productIds);
 
+    @Modifying
+    @Query(value = "DELETE FROM produto_adicional WHERE produto_id = :produtoId", nativeQuery = true)
+    void deleteAdicionaisByProdutoId(@Param("produtoId") Long produtoId);
+
+    @Query(value = "SELECT COUNT(*) > 0 FROM produto_adicional WHERE produto_id = :produtoId", nativeQuery = true)
+    boolean verificarAdicionaisByProdutoId(@Param("produtoId") Long produtoId);
 }
