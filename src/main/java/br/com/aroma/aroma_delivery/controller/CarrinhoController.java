@@ -3,6 +3,7 @@ package br.com.aroma.aroma_delivery.controller;
 import br.com.aroma.aroma_delivery.dto.CarrinhoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoItemDto;
+import br.com.aroma.aroma_delivery.dto.ItemCarrinhoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
 import br.com.aroma.aroma_delivery.service.CarrinhoService;
 import jakarta.validation.Valid;
@@ -54,5 +55,11 @@ public class CarrinhoController {
     @GetMapping("/{carrinhoId}/resumo")
     public ResponseEntity<CarrinhoResumoDto> resumo(@PathVariable Long carrinhoId) {
         return ResponseEntity.ok(carrinhoService.resumo(carrinhoId));
+    }
+
+    @GetMapping("/{carrinhoId}/produto/{produtoId}")
+    public ResponseEntity<ItemCarrinhoDto> obterItemCarrinho(@PathVariable Long carrinhoId,
+        @PathVariable Long produtoId) {
+        return ResponseEntity.ok(carrinhoService.obterItemCarrinho(carrinhoId, produtoId));
     }
 }

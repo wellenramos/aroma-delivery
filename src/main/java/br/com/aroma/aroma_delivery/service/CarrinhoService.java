@@ -6,6 +6,7 @@ import br.com.aroma.aroma_delivery.dto.CarrinhoResumoDto.ItemCarrinhoResumoDto;
 import br.com.aroma.aroma_delivery.dto.CarrinhoResumoItemDto;
 import br.com.aroma.aroma_delivery.dto.CartaoDto;
 import br.com.aroma.aroma_delivery.dto.EnderecoDto;
+import br.com.aroma.aroma_delivery.dto.ItemCarrinhoDto;
 import br.com.aroma.aroma_delivery.dto.command.SalvarItemCarrinhoCommand;
 import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.exceptions.NotFoundException;
@@ -16,12 +17,14 @@ import br.com.aroma.aroma_delivery.model.ItemCarrinho;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.model.Usuario;
 import br.com.aroma.aroma_delivery.repository.CarrinhoRepository;
+import br.com.aroma.aroma_delivery.repository.ItemCarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import br.com.aroma.aroma_delivery.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,7 @@ public class CarrinhoService {
     private final SecurityService securityService;
     private final EnderecoService enderecoService;
     private final CartaoService cartaoService;
+    private final ItemCarrinhoRepository itemCarrinhoRepository;
 
     public CarrinhoDto adicionarItem(SalvarItemCarrinhoCommand command) {
         Produto produto = produtoRepository.findById(command.getProdutoId())
@@ -59,9 +63,17 @@ public class CarrinhoService {
         itemCarrinho.setProduto(produto);
         itemCarrinho.setCarrinho(carrinho);
 
-        carrinho.getItens().add(itemCarrinho);
-        carrinho.setItens(carrinho.getItens());
-        atualizarItensAdicionais(command.getAdicionais(), itemCarrinho);
+        Optional<ItemCarrinho> itemCarrinhoJaAdd = carrinho.getItens().stream()
+            .filter(it -> it.getProduto().getId().equals(produto.getId())).findFirst();
+
+        if (itemCarrinhoJaAdd.isPresent()) {
+            itemCarrinhoJaAdd.get().setObservacao(command.getObservacao());
+            itemCarrinhoJaAdd.get().setQuantidade(command.getQuantidade());
+            atualizarItensAdicionais(command.getAdicionais(), itemCarrinhoJaAdd.get());
+        } else {
+            carrinho.getItens().add(itemCarrinho);
+            atualizarItensAdicionais(command.getAdicionais(), itemCarrinho);
+        }
 
         Carrinho saved = carrinhoRepository.save(carrinho);
         return carrinhoMapper.toDto(saved);
@@ -193,5 +205,18 @@ public class CarrinhoService {
             .cartao(cartao)
             .itens(itens)
             .build();
+    }
+
+    public ItemCarrinhoDto obterItemCarrinho(Long carrinhoId, Long produtoId) {
+        Carrinho carrinho = carrinhoRepository.findById(carrinhoId)
+            .orElseThrow(() -> new NotFoundException("Carrinho não encontrado"));
+
+        Produto produto = produtoRepository.findById(produtoId)
+            .orElseThrow(() -> new NotFoundException("Produto não encontrado"));
+
+        Optional<ItemCarrinho> itemCarrinho = itemCarrinhoRepository.
+            findByCarrinhoAndProduto(carrinho, produto);
+
+        return itemCarrinho.map(itemCarrinhoMapper::toDto).orElse(null);
     }
 }
