@@ -6,9 +6,9 @@ spring:
     name: aroma-delivery
 
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5435/aromadelivery
-#    url: jdbc:postgresql://aromadelivery.c16g0ws4ywzt.us-east-1.rds.amazonaws.com:5432/aromadelivery
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5435/aromadelivery
+    url: jdbc:postgresql://aromadelivery.cd60cc24wdbw.us-east-1.rds.amazonaws.com:5432/aromadelivery
     username: aromadelivery
     password: aromadelivery2024
   jpa:
