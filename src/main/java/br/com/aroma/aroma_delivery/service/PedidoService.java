@@ -196,8 +196,9 @@ public class PedidoService {
 
   private BigDecimal calcularValorTotal(List<ItemCarrinho> itens) {
     return itens.stream()
-        .map(item -> item.getProduto().getPreco().multiply(new BigDecimal(item.getQuantidade())))
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
+        .map(ItemCarrinho::calcularValorTotalItem)
+        .reduce(BigDecimal.ZERO, BigDecimal::add)
+        .add(BigDecimal.valueOf(5));
   }
 
   public PedidoDto confimarRecebimento(Long id) {
