@@ -16,4 +16,5 @@ public class ItemCarrinhoDto {
     private String observacao;
     private TamanhoEnum tamanhoCopo;
     private List<ProdutoResumidoDto> adicionais;
+
 }
