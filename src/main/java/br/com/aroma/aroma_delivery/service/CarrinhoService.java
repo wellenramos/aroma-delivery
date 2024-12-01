@@ -63,17 +63,9 @@ public class CarrinhoService {
         itemCarrinho.setProduto(produto);
         itemCarrinho.setCarrinho(carrinho);
 
-        Optional<ItemCarrinho> itemCarrinhoJaAdd = carrinho.getItens().stream()
-            .filter(it -> it.getProduto().getId().equals(produto.getId())).findFirst();
-
-        if (itemCarrinhoJaAdd.isPresent()) {
-            itemCarrinhoJaAdd.get().setObservacao(command.getObservacao());
-            itemCarrinhoJaAdd.get().setQuantidade(command.getQuantidade());
-            atualizarItensAdicionais(command.getAdicionais(), itemCarrinhoJaAdd.get());
-        } else {
-            carrinho.getItens().add(itemCarrinho);
-            atualizarItensAdicionais(command.getAdicionais(), itemCarrinho);
-        }
+        carrinho.getItens().add(itemCarrinho);
+        carrinho.setItens(carrinho.getItens());
+        atualizarItensAdicionais(command.getAdicionais(), itemCarrinho);
 
         Carrinho saved = carrinhoRepository.save(carrinho);
         return carrinhoMapper.toDto(saved);
