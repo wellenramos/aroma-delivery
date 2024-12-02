@@ -1,5 +1,6 @@
 package br.com.aroma.aroma_delivery.repository;
 
+import br.com.aroma.aroma_delivery.dto.enums.SituacaoProdutoEnum;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import feign.Param;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
-    List<Produto> findByCategoria(Categoria categoria);
+    List<Produto> findByCategoriaAndSituacao(Categoria categoria, SituacaoProdutoEnum situacao);
 
-    @Query("SELECT p FROM Produto p WHERE p.categoria.id = :categoriaId AND CAST(unaccent(LOWER(p.nome)) AS text) LIKE CONCAT('%', CAST(unaccent(LOWER(:nome)) AS text), '%')")
-    List<Produto> buscarPorNomeECategoria(Long categoriaId, String nome);
+    @Query("SELECT p FROM Produto p WHERE p.categoria.id = :categoriaId AND p.situacao = :situacao AND CAST(unaccent(LOWER(p.nome)) AS text) LIKE CONCAT('%', CAST(unaccent(LOWER(:nome)) AS text), '%')")
+    List<Produto> buscarPorNomeECategoria(Long categoriaId, String nome, SituacaoProdutoEnum situacao);
 
     @Query("SELECT p FROM Produto p WHERE CAST(unaccent(LOWER(p.nome)) AS text) LIKE CONCAT('%', CAST(unaccent(LOWER(:nome)) AS text), '%')")
     List<Produto> buscarPorNome(String nome);

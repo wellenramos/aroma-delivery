@@ -8,8 +8,6 @@ import br.com.aroma.aroma_delivery.mapper.ProdutoMapper;
 import br.com.aroma.aroma_delivery.model.Categoria;
 import br.com.aroma.aroma_delivery.model.Produto;
 import br.com.aroma.aroma_delivery.repository.CategoriaRepository;
-import br.com.aroma.aroma_delivery.repository.FavoritoRepository;
-import br.com.aroma.aroma_delivery.repository.ItemCarrinhoRepository;
 import br.com.aroma.aroma_delivery.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -106,7 +104,7 @@ public class ProdutoService {
     public List<ProdutoDto> buscarPorCategoria(Long categoriaId) {
         Categoria categoria = categoriaRepository.findById(categoriaId)
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
-        List<Produto> produtos = repository.findByCategoria(categoria);
+        List<Produto> produtos = repository.findByCategoriaAndSituacao(categoria, SituacaoProdutoEnum.PUBLICADO);
         return mapper.toDtoList(produtos);
     }
 
@@ -115,8 +113,8 @@ public class ProdutoService {
                 .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
 
         if (Objects.nonNull(nome) && !nome.isEmpty())
-            return mapper.toDtoList(repository.buscarPorNomeECategoria(categoria.getId(), nome));
-        return mapper.toDtoList(repository.findByCategoria(categoria));
+            return mapper.toDtoList(repository.buscarPorNomeECategoria(categoria.getId(), nome, SituacaoProdutoEnum.PUBLICADO));
+        return mapper.toDtoList(repository.findByCategoriaAndSituacao(categoria, SituacaoProdutoEnum.PUBLICADO));
     }
 
     public ProdutoDto publicar(Long id) {
@@ -148,6 +146,6 @@ public class ProdutoService {
     public List<ProdutoDto> buscarAdicionais() {
         Categoria categoria = categoriaRepository.findById(4L)
             .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
-        return mapper.toDtoList(repository.findByCategoria(categoria));
+        return mapper.toDtoList(repository.findByCategoriaAndSituacao(categoria, SituacaoProdutoEnum.PUBLICADO));
     }
 }
