@@ -14,14 +14,14 @@ VALUES
 
 INSERT INTO Produto (nome, descricao, preco, categoria_id, situacao)
 VALUES
-    ('Café Geisha', 'Café de sabor floral e frutado, considerado um dos melhores do mundo.', 150.00, 2, 'PUBLICADO'),
-    ('Café Jamaican Blue Mountain', 'Café suave, com um leve toque de doçura e acidez.', 120.00, 2, 'PUBLICADO'),
-    ('Café Kopi Luwak', 'Café raro, conhecido por seu processo de fermentação digestiva pelo civeta.', 200.00, 2, 'PUBLICADO'),
-    ('Café Panamá Boquete', 'Café suave e frutado, com notas de frutas vermelhas e cacau.', 110.00, 2, 'PUBLICADO'),
-    ('Café Yirgacheffe', 'Café de sabor complexo, com notas de flores e frutas cítricas.', 90.00, 2, 'PUBLICADO'),
-    ('Café Hawaiian Kona', 'Café exótico, com notas de nozes e caramelo.', 250.00, 2, 'PUBLICADO'),
-    ('Café Panamanian Geisha', 'Café raro com notas florais e frutadas.', 230.00, 2, 'PUBLICADO'),
-    ('Café Sumatra Mandheling', 'Café especial com sabor terroso e notas de especiarias.', 170.00, 2, 'PUBLICADO'),
+    ('Café Geisha', 'Café de sabor floral e frutado, considerado um dos melhores do mundo.', 15.00, 2, 'PUBLICADO'),
+    ('Café Jamaican Blue Mountain', 'Café suave, com um leve toque de doçura e acidez.', 20.00, 2, 'PUBLICADO'),
+    ('Café Kopi Luwak', 'Café raro, conhecido por seu processo de fermentação digestiva pelo civeta.', 20.00, 2, 'PUBLICADO'),
+    ('Café Panamá Boquete', 'Café suave e frutado, com notas de frutas vermelhas e cacau.', 22.00, 2, 'PUBLICADO'),
+    ('Café Yirgacheffe', 'Café de sabor complexo, com notas de flores e frutas cítricas.', 25.00, 2, 'PUBLICADO'),
+    ('Café Hawaiian Kona', 'Café exótico, com notas de nozes e caramelo.', 25.00, 2, 'PUBLICADO'),
+    ('Café Panamanian Geisha', 'Café raro com notas florais e frutadas.', 23.00, 2, 'PUBLICADO'),
+    ('Café Sumatra Mandheling', 'Café especial com sabor terroso e notas de especiarias.', 26.00, 2, 'PUBLICADO'),
     ('Café Irish', 'Café com creme de leite e um toque de whisky irlandês.', 28.00, 2, 'PUBLICADO'),
     ('Café Caramel Macchiato', 'Café expresso com leite vaporizado e calda de caramelo.', 25.00, 2, 'PUBLICADO'),
     ('Café Mocha', 'Café expresso com chocolate, leite vaporizado e calda de chocolate.', 23.00, 2, 'PUBLICADO');
