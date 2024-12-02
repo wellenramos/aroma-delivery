@@ -133,6 +133,7 @@ public class ProdutoService {
                 .nome(it.getNome())
                 .descricao(it.getDescricao())
                 .preco(it.getPreco())
+                .situacao(it.getSituacao())
                 .build()
         ).toList();
     }
